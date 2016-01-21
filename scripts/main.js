@@ -4,6 +4,7 @@
   *
   **/
 
+  var $mapWrapper = $('.map-wrapper');
 
 /**
   *
@@ -17,3 +18,5 @@
   *   This handles requests to Google Maps
   *
   **/
+
+var googleMapsAPIKey = 'AIzaSyClMls0bXZ3jgznlsLiP0ZgRrzSgUGFMbU';
