@@ -22,8 +22,8 @@ nav {
       margin-left: 0;
 }
 
-.map-wrapper {
-  position: fixed;
+#map {
+  position: fixed!important;
   width: 100%;
   height: 100%;
   top: 0;
