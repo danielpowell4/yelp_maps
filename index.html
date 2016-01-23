@@ -25,29 +25,29 @@
         <div id="yelp-search-box">
         </div>
 
-        <div class="yelp-search-results">
+        <div data-bind="foreach: response" class="yelp-search-results">
             <div class="result-card" id="card1">
 
-                <h3 class="search-item-title">
+                <h3 data-bind="text: name" class="search-item-title">
                     <span class="search-item-counter"></span>
                 </h3>
 
-                <p class="search-item-snippet"></p>
+                <p data-bind="text: description" class="search-item-snippet"></p>
 
                 <div class="search-image-container">
-                  <img class="search-image" src="">
+                  <img class="search-image" data-bind="attr: {src: imgSrc}">
                 </div>
 
                 <div class="search-item-contact-box">
 
                   <div class="search-item-address">
-                    <div class="address-line-1"></div>
-                    <div class="address-line-2"></div>
+                    <div data-bind="text: address1" class="address-line-1"></div>
+                    <div data-bind="text: cityState" class="address-line-2"></div>
                   </div>
 
                   <div class="search-item-contact">
-                    <div class="contact-line-1"></div>
-                    <div class="contact-line-2"></div>
+                    <div class="contact-line-1"><a href="/#" data-bind="attr: {href: webURL}">Visit their Website</a></div>
+                    <div data-bind="text: phone" class="contact-line-2"></div>
                   </div>
 
                 </div>
@@ -69,6 +69,8 @@
                 </div>
 
           </div>
+
+          <!-- This is where the card template starts
 
           <div class="result-card" id=card2>
 
@@ -114,6 +116,7 @@
 
         </div>
 
+         ^^^^^^^^^^^^^^^^^^^^ This is where the card template stops ^^^^^^^^^^^^^^^^^^^^^^^^^ -->
 
 
         </div>
@@ -124,6 +127,9 @@
 
 <!-- jQuery to the rescue -->
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+<!-- knockout with the big bang bam -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 
 <!-- Scripts Built by Dan -->
   <script src="scripts/main.js"></script>
