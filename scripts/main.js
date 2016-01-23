@@ -121,7 +121,7 @@ function initMap() {
                                                                                               * */
   });
 
-  marker1.addListener('click', function(event){
+  marker2.addListener('click', function(event){
     map.panTo({lat: marker1.getPosition().lat(), lng: (marker1.getPosition().lng() - 1.28)}); /** includes correction factor of -1.28
                                                                                               * to scoot the 'center' to the right
                                                                                               * */
