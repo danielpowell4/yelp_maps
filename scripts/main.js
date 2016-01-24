@@ -66,6 +66,11 @@ var placeCard = function(data) {
 var ViewModel = function() {
     var that = this;
 
+    this.resultList = ko.observableArray([]);
+
+    response.forEach(function(place){
+      that.resultList.push( new placeCard(place) );
+    });
 };
 
 ko.applyBindings(new ViewModel());
