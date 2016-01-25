@@ -71,6 +71,7 @@ var ViewModel = function() {
     response.forEach(function(place){
       that.resultList.push( new placeCard(place) );
     });
+
 };
 
 ko.applyBindings(new ViewModel());

@@ -26,6 +26,7 @@
         </div>
 
         <div data-bind="foreach: resultList" class="yelp-search-results">
+
             <div class="result-card" id="card1">
 
                 <h3 data-bind="text: name" class="search-item-title">
@@ -68,60 +69,11 @@
                   </ul>
                 </div>
 
-          </div>
+          </div> <!-- card results -->
 
-          <!-- This is where the card template starts
+        </div> <!-- yelp search results -->
 
-          <div class="result-card" id=card2>
-
-              <h3 class="search-item-title">
-                  <span class="search-item-counter">01 </span> BEACONS HOUSE
-              </h3>
-
-              <p class="search-item-snippet">Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.</p>
-
-              <div class="search-image-container">
-                <img class="search-image" src="http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-red-room-01.jpg">
-              </div>
-
-              <div class="search-item-contact-box">
-
-                <div class="search-item-address">
-                  <div class="address-line-1">1600 Pennsylvia Ave</div>
-                  <div class="address-line-2">Beaconville, USA</div>
-                </div>
-
-                <div class="search-item-contact">
-                  <div class="contact-line-1"><a href="/#">Visit their Website</a></div>
-                  <div class="contact-line-2">555 867 5309</div>
-                </div>
-
-              </div>
-
-              <div class="search-item-classification"></div>
-
-              <btn class="search-item-directions" href="/#">Get Directions</btn>
-
-              <div class="search-item-social">
-                <h4>SHARE THIS SPOT!</h4>
-                <ul>
-                  <li><a target="none" class="search-item-social-buttons-popup" href="https://twitter.com/intent/tweet?text=City%20O%27%20City&amp;url=http%3A%2F%2Fgobloom.io;via=BloomInteractive">
-                    twit</a>
-                  </li>
-                  <li><a target="none" class="search-item-social-buttons-popup" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fgobloom.io">
-                    fb</a>
-                  </li>
-                </ul>
-              </div>
-
-        </div>
-
-         ^^^^^^^^^^^^^^^^^^^^ This is where the card template stops ^^^^^^^^^^^^^^^^^^^^^^^^^ -->
-
-
-        </div>
-
-      </div>
+      </div> <!-- results-container -->
 
   </body>
 
@@ -132,7 +84,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 
 <!-- Scripts Built by Dan -->
-  <script src="scripts/main.js"></script>
+  <script src="scripts/app-engine.js"></script>
 
   <!-- GoogleMaps Approval -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClMls0bXZ3jgznlsLiP0ZgRrzSgUGFMbU&callback=initMap"></script>
