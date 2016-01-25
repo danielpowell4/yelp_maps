@@ -48,6 +48,19 @@ h1 {
   margin: 0;
 }
 
+#yelp-search-box {
+  background-color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-item {
+  padding: 0 .5em;
+}
+
 #results-container {
     width: 60%;
     max-width: 485px;

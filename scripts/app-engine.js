@@ -66,6 +66,9 @@ var placeCard = function(data) {
 var ViewModel = function() {
     var that = this;
 
+    searchFor =  ko.observable("Something Great"), // form Yelp Search Form with prepopulated placeholder
+    searchNear = ko.observable("Somewhere Magical"), // form Yelp Search Form with prepopulated placeholder
+
     this.resultList = ko.observableArray([]);
 
     response.forEach(function(place){
@@ -132,5 +135,72 @@ function initMap() {
                                                                                               * to scoot the 'center' to the right
                                                                                               * */
   });
+
+}
+
+function yelpAjax(searchFor, searchNear) {
+
+	/**
+    *	Keys and other tokens needed to access the Yelp API via OAuth
+	  *	In a non-Udacious scenario this would have to be moved
+    * to a server side script and therefore actually be "secret"
+	  **/
+
+	var auth = {
+			    consumerKey : "2M-JWI9l8UBCt3vm0R6vZg",
+			    consumerSecret : "2TIm_ve4y6unTQR2D1HGnWTjFOM",
+			    accessToken : "p44DAD9S6MecSv66hmrdR3qdJZhVkg7o",
+			    accessTokenSecret : "rhnGNKjrDKMLZT0aRET8qIA-aWQ",
+			    serviceProvider : {
+			        signatureMethod : "HMAC-SHA1" // found here https://www.yelp.com/developers/documentation/v2/authentication
+			    }
+			};
+
+	/**
+	  *	Grab the "secret" part of the auth keys and put them in an object
+    * that will then be passed on to the coming OAuth.SignatureMethod
+	  **/
+
+	var accessor = {
+	    consumerSecret : auth.consumerSecret,
+	    tokenSecret : auth.accessTokenSecret
+	};
+
+	/**
+	  *	Create an array of parameters to handoff to message object that follows
+    * This helps keep things more bite-sized...
+	  **/
+
+	var parameters = [
+    ['term', searchFor],
+    ['location', searchNear],
+    ['callback', 'cb'],
+    ['oauth_consumer_key', auth.consumerKey],
+    ['oauth_consumer_secret', auth.consumerSecret],
+    ['oauth_token', auth.accessToken],
+    ['oauth_signature_method', auth.serviceProvider.signatureMethod]
+  ];
+
+
+	/**
+	  *	This message object is to be fired to Yelp as part of then
+    * OAuth.setTimestampAndNonce TODO: make this server-side
+	  **/
+
+	var message = {
+	    'action' : 'http://api.yelp.com/v2/search',
+	    'method' : 'GET',
+	    'parameters' : parameters
+	};
+
+	/**
+	  *	Vitrually Sign and send things as part of some OAuth JS Magic
+	  **/
+
+	OAuth.setTimestampAndNonce(message);
+	OAuth.SignatureMethod.sign(message, accessor);
+	var parameterMap = OAuth.getParameterMap(message.parameters);
+	yJax(message.action, parameterMap);
+
 
 }

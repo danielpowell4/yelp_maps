@@ -23,6 +23,8 @@
       <div id="results-container">
 
         <div id="yelp-search-box">
+          <p class="search-item">Show me:  <input data-bind="value: searchFor" type="text"></input></p>
+          <p class="search-item">in:  <input data-bind="value: searchNear" type="text"></input></p>
         </div>
 
         <div data-bind="foreach: resultList" class="yelp-search-results">
