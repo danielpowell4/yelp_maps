@@ -38,7 +38,7 @@
                 <p data-bind="text: description" class="search-item-snippet"></p>
 
                 <div class="search-image-container">
-                  <img class="search-image" data-bind="attr: {src: imgSrc}">
+                  <img class="search-image" data-bind="attr: {src: img_url}">
                 </div>
 
                 <div class="search-item-contact-box">
@@ -85,10 +85,16 @@
 <!-- knockout with the big bang bam -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 
+  <!-- OAuth items -->
+  <script src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+  <script src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
+  
 <!-- Scripts Built by Dan -->
   <script src="scripts/app-engine.js"></script>
 
   <!-- GoogleMaps Approval -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClMls0bXZ3jgznlsLiP0ZgRrzSgUGFMbU&callback=initMap"></script>
+
+
 
 </html>

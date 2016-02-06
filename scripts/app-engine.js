@@ -21,8 +21,15 @@ var response = [{
     'cityState' : 'Revelstoke, BC',
     'phone' : '250 814 0087',
     'webURL' : 'www.revelstokemountainresort.com/',
-    'businesslatitude' : 50.9583028,
-    'businesslongitude' : -118.1637752,
+    'location': {
+      'coordinate': {
+        'latitude': 50.9583028,
+        'longitude': -118.1637752,
+      },
+      'display_address' : ['2950 Camozzi Rd'],
+
+    }
+
   }, {
       'id' : '12309120',
       'name' : "Artie's House",
@@ -32,8 +39,16 @@ var response = [{
       'cityState' : 'Revelstoke, BC',
       'phone' : '250 837 7500',
       'webURL' : 'pc.gc.ca',
-      'businesslatitude' : 51.209417,
-      'businesslongitude' : -117.723987,
+
+      'location': {
+        'coordinate': {
+          'latitude': 51.209417,
+          'longitude': -117.723987,
+        },
+        'display_address' : ['23 TransCanada Highway'],
+
+      }
+
     }, {
         'id' : '12309120',
         'name' : "Beacon's House #2",
@@ -43,24 +58,45 @@ var response = [{
         'cityState' : 'Revelstoke, BC',
         'phone' : '250 814 0087',
         'webURL' : 'www.revelstokemountainresort.com/',
-        'businesslatitude' : 50.9583028,
-        'businesslongitude' : -118.1637752,
+
+
+        'location': {
+          'coordinate': {
+            'latitude': 50.9583028,
+            'longitude': -118.1637752,
+          },
+          'display_address' : ['2950 Camozzi Rd'],
+
+        }
+
       },
 
 ]
+
+var markers = [];
 
 var placeCard = function(data) {
 
   this.name = ko.observable(data.name);
   this.description = ko.observable(data.description);
-  this.imgSrc = ko.observable(data.imgSrc);
+  this.img_url = ko.observable(data.image_url);
   this.address1 = ko.observable(data.address1);
   this.cityState = ko.observable(data.cityState);
   this.phone = ko.observable(data.phone);
-  this.webURL = ko.observable(data.webURL);
-  this.businesslatitude = ko.observable(data.businesslatitude);
-  this.businesslongitude = ko.observable(data.businesslongitude);
+  this.webURL = ko.observable(data.url);
+  this.loc = {
+    lat: data.location.coordinate.latitude,
+    lon: data.location.coordinate.longitude,
+    address: data.location.display_address[0] +
+      '<br>' + data.location.display_address[data.location.display_address.length - 1]
+  },
+  this.review = {
+    img: data.snippet_image_url,
+    txt: data.snippet_text
+  };
 
+  this.marker = [this.name, this.phone, this.loc.lat, this.loc.lon, this.review.img, this.review.txt];
+  markers.push(this.marker);
 }
 
 var ViewModel = function() {
@@ -86,6 +122,109 @@ ko.applyBindings(new ViewModel());
   *   ------------------------------
   **/
 
+  function yelpAjax(searchFor, searchNear) {
+
+  	/**
+      *	Keys and other tokens needed to access the Yelp API via OAuth
+  	  *	In a non-Udacious scenario this would have to be moved
+      * to a server side script and therefore actually be "secret"
+  	  **/
+
+  	var auth = {
+  			    consumerKey : "2M-JWI9l8UBCt3vm0R6vZg",
+  			    consumerSecret : "2TIm_ve4y6unTQR2D1HGnWTjFOM",
+  			    accessToken : "p44DAD9S6MecSv66hmrdR3qdJZhVkg7o",
+  			    accessTokenSecret : "rhnGNKjrDKMLZT0aRET8qIA-aWQ",
+  			    serviceProvider : {
+  			        signatureMethod : "HMAC-SHA1" // found here https://www.yelp.com/developers/documentation/v2/authentication
+  			    }
+  			};
+
+  	/**
+  	  *	Grab the "secret" part of the auth keys and put them in an object
+      * that will then be passed on to the coming OAuth.SignatureMethod
+  	  **/
+
+  	var accessor = {
+  	    consumerSecret : auth.consumerSecret,
+  	    tokenSecret : auth.accessTokenSecret
+  	};
+
+  	/**
+  	  *	Create an array of parameters to handoff to message object that follows
+      * This helps keep things more bite-sized...
+  	  **/
+
+  	var parameters = [
+      ['term', searchFor],
+      ['location', searchNear],
+      ['callback', 'cb'],
+      ['oauth_consumer_key', auth.consumerKey],
+      ['oauth_consumer_secret', auth.consumerSecret],
+      ['oauth_token', auth.accessToken],
+      ['oauth_signature_method', 'HMAC-SHA1']
+    ];
+
+    console.log(parameters);
+
+  	/**
+  	  *	This message object is to be fired to Yelp as part of then
+      * OAuth.setTimestampAndNonce TODO: make this server-side
+  	  **/
+
+  	var message = {
+  	    'action' : 'http://api.yelp.com/v2/search',
+  	    'method' : 'GET',
+  	    'parameters' : parameters
+  	};
+
+  	/**
+  	  *	Vitrually sign and send things as part of some OAuth JS Magic
+  	  **/
+
+  	OAuth.setTimestampAndNonce(message);
+  	OAuth.SignatureMethod.sign(message, accessor);
+  	var parameterMap = OAuth.getParameterMap(message.parameters);
+  	yJax(message.action, parameterMap);
+
+    console.log(parameters);
+
+  };
+
+  /**
+    *   Ajax OAuth mehod to go talk to Yelp and grab data (yData)
+    **/
+
+  function yJax(url, yData){
+    $.ajax({
+      'url': url,
+      'data': yData,
+      'dataType' : 'jsonp',
+      'global': true,
+      'jsonpCallback': 'cb',
+      'success' : function(data){
+        makeYelpList(data);
+      }
+    });
+  }
+
+  /**
+    *   Packaged function that turns the data from api call
+    *   observable cards and map markers taking data (d)
+    *   as parameter
+    **/
+
+  function makeYelpList(d){
+      // this function will need to create the place card and make the map
+  }
+
+  function clearAllMarkers() {
+    for (marker in markers){ // TODO decide if var should be markers or abstract away wtih allMarkers
+      markers[marker].setMap(null);
+    }
+
+    markers = [];
+  }
 
 /**
   *   ------------------------------------
@@ -102,13 +241,13 @@ function initMap() {
 
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: response[0].businesslatitude, lng: response[0].businesslongitude},
+    center: {lat: response[0].location.coordinate.latitude, lng: response[0].location.coordinate.longitude},
     scrollwheel: false,
     zoom: 8
   });
 
   // sets the position for the marker to be called in a jiffy
-  var markerLatLng = {lat: response[0].businesslatitude, lng: response[0].businesslongitude};
+  var markerLatLng = {lat: response[0].location.coordinate.latitude, lng: response[0].location.coordinate.longitude};
 
   // adds a marker to the map
   var marker = new google.maps.Marker({
@@ -118,7 +257,7 @@ function initMap() {
     });
 
   var marker2 = new google.maps.Marker({
-      position: {lat: response[1].businesslatitude, lng: response[1].businesslongitude},
+      position: {lat: response[1].location.coordinate.latitude, lng: response[1].location.coordinate.longitude},
       map: map,
       title: 'Arties House'
       });
@@ -138,69 +277,43 @@ function initMap() {
 
 }
 
-function yelpAjax(searchFor, searchNear) {
 
-	/**
-    *	Keys and other tokens needed to access the Yelp API via OAuth
-	  *	In a non-Udacious scenario this would have to be moved
-    * to a server side script and therefore actually be "secret"
-	  **/
+/**
+  * function that loops through markers array and places
+  * any and all markers to the map
+  **/
 
-	var auth = {
-			    consumerKey : "2M-JWI9l8UBCt3vm0R6vZg",
-			    consumerSecret : "2TIm_ve4y6unTQR2D1HGnWTjFOM",
-			    accessToken : "p44DAD9S6MecSv66hmrdR3qdJZhVkg7o",
-			    accessTokenSecret : "rhnGNKjrDKMLZT0aRET8qIA-aWQ",
-			    serviceProvider : {
-			        signatureMethod : "HMAC-SHA1" // found here https://www.yelp.com/developers/documentation/v2/authentication
-			    }
-			};
+function placeMarkers() {
+    for(var i=0 ; i<markers.length; i++){
+      // create the positon object
+      var positon = new google.maps.LatLng(/* TODO put the LatLng markers in here */);
+      // create the mkr object from the marker param
+      var mkr = new google.maps.Marker({
+        position: position,
+        map: map,
+        animation: google.maps.Animation.DROP, //change to something else?
+        title: "",
+        ph: "",
+        pic: "",
+        blurb: ""
+      });
+    }
 
-	/**
-	  *	Grab the "secret" part of the auth keys and put them in an object
-    * that will then be passed on to the coming OAuth.SignatureMethod
-	  **/
+    // push these new objects to an array variable
 
-	var accessor = {
-	    consumerSecret : auth.consumerSecret,
-	    tokenSecret : auth.accessTokenSecret
-	};
+    // bind mouseover to infoWindows
+    google.map.event.addListener(mrk, 'mouseover', (function(mk, i){
+        return function() {
+          makeInfoWindow(mk);
+        }
+      }));
 
-	/**
-	  *	Create an array of parameters to handoff to message object that follows
-    * This helps keep things more bite-sized...
-	  **/
-
-	var parameters = [
-    ['term', searchFor],
-    ['location', searchNear],
-    ['callback', 'cb'],
-    ['oauth_consumer_key', auth.consumerKey],
-    ['oauth_consumer_secret', auth.consumerSecret],
-    ['oauth_token', auth.accessToken],
-    ['oauth_signature_method', auth.serviceProvider.signatureMethod]
-  ];
-
-
-	/**
-	  *	This message object is to be fired to Yelp as part of then
-    * OAuth.setTimestampAndNonce TODO: make this server-side
-	  **/
-
-	var message = {
-	    'action' : 'http://api.yelp.com/v2/search',
-	    'method' : 'GET',
-	    'parameters' : parameters
-	};
-
-	/**
-	  *	Vitrually Sign and send things as part of some OAuth JS Magic
-	  **/
-
-	OAuth.setTimestampAndNonce(message);
-	OAuth.SignatureMethod.sign(message, accessor);
-	var parameterMap = OAuth.getParameterMap(message.parameters);
-	yJax(message.action, parameterMap);
-
-
+    // bind click event to scroll event in DOM and create infoWindow
+    google.map.event.addListener(mkr, 'click', (function(mk,i){
+        return function(){
+          makeInfoWindow(mk);
+          // need function with scrollTo position and change marker sytle
+        }
+    })
+  )
 }
