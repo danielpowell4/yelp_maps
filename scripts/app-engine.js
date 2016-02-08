@@ -12,15 +12,15 @@
     *   -------------------------------------------------------------------------
     **/
 
-var response = [{
+var response =  [{
     'id' : '12309120',
     'name' : "Beacon's House",
-    'description' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
-    'imgSrc' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-red-room-01.jpg",
+    'snippet_text' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
+    'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-red-room-01.jpg",
     'address1' : '2950 Camozzi Rd',
     'cityState' : 'Revelstoke, BC',
-    'phone' : '250 814 0087',
-    'webURL' : 'www.revelstokemountainresort.com/',
+    'display_phone' : '250 814 0087',
+    'url' : 'www.revelstokemountainresort.com/',
     'location': {
       'coordinate': {
         'latitude': 50.9583028,
@@ -33,12 +33,12 @@ var response = [{
   }, {
       'id' : '12309120',
       'name' : "Artie's House",
-      'description' : "Artie has an abode to be adored. It's like nothing you've ever experienced. Not only does it have year round views of Canada's incredible Glacier National Park, but it is also has a pool. Artie is sure to have his humans keep a stockpile of treats always on the ready.",
-      'imgSrc' : "https://s-media-cache-ak0.pinimg.com/originals/0d/80/1e/0d801ec8b8d40c12e67d4dffb994d31d.jpg",
+      'snippet_text' : "Artie has an abode to be adored. It's like nothing you've ever experienced. Not only does it have year round views of Canada's incredible Glacier National Park, but it is also has a pool. Artie is sure to have his humans keep a stockpile of treats always on the ready.",
+      'image_url' : "https://s-media-cache-ak0.pinimg.com/originals/0d/80/1e/0d801ec8b8d40c12e67d4dffb994d31d.jpg",
       'address1' : '23 TransCanada Highway',
       'cityState' : 'Revelstoke, BC',
-      'phone' : '250 837 7500',
-      'webURL' : 'pc.gc.ca',
+      'display_phone' : '250 837 7500',
+      'url' : 'pc.gc.ca',
 
       'location': {
         'coordinate': {
@@ -52,12 +52,12 @@ var response = [{
     }, {
         'id' : '12309120',
         'name' : "Beacon's House #2",
-        'description' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
-        'imgSrc' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-red-room-01.jpg",
+        'snippet_text' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
+        'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-red-room-01.jpg",
         'address1' : '2950 Camozzi Rd',
         'cityState' : 'Revelstoke, BC',
-        'phone' : '250 814 0087',
-        'webURL' : 'www.revelstokemountainresort.com/',
+        'display_phone' : '250 814 0087',
+        'url' : 'www.revelstokemountainresort.com/',
 
 
         'location': {
@@ -70,19 +70,23 @@ var response = [{
         }
 
       },
-
-]
+    ];
 
 var markers = [];
 
 var placeCard = function(data) {
 
+  var that = this;
+
   this.name = ko.observable(data.name);
-  this.description = ko.observable(data.description);
-  this.img_url = ko.observable(data.image_url);
-  this.address1 = ko.observable(data.address1);
-  this.cityState = ko.observable(data.cityState);
-  this.phone = ko.observable(data.phone);
+  this.description = ko.observable(data.snippet_text);
+  this.imgSrc = ko.observable(data.image_url);
+  this.address1 = ko.observable(data.location.display_address[0]);
+  this.city =  ko.observable(data.location.city);
+  this.state = ko.observable(data.location.state_code);
+  this.zip = ko.observable(data.location.postal_code);
+  this.address2 = ko.computed(function(){return that.city() + ", " + that.state() + " " + that.zip()});
+  this.phone = ko.observable(data.display_phone);
   this.webURL = ko.observable(data.url);
   this.loc = {
     lat: data.location.coordinate.latitude,
@@ -99,19 +103,29 @@ var placeCard = function(data) {
   markers.push(this.marker);
 }
 
+var resultList = ko.observableArray([]);
+
+function updateYelpResults(){
+  // get all the needed info
+    yelpAjax(searchFor(), searchNear());
+}
+
+var searchFor =  ko.observable("Tacos"); // form Yelp Search Form with prepopulated placeholder
+var searchNear = ko.observable("80210"); // form Yelp Search Form with prepopulated placeholder
+
+
 var ViewModel = function() {
     var that = this;
 
-    searchFor =  ko.observable("Something Great"), // form Yelp Search Form with prepopulated placeholder
-    searchNear = ko.observable("Somewhere Magical"), // form Yelp Search Form with prepopulated placeholder
 
-    this.resultList = ko.observableArray([]);
+  //  this.resultList = ko.observableArray([]);
 
     response.forEach(function(place){
-      that.resultList.push( new placeCard(place) );
+      resultList.push( new placeCard(place) );
     });
 
 };
+
 
 ko.applyBindings(new ViewModel());
 
@@ -162,10 +176,10 @@ ko.applyBindings(new ViewModel());
       ['oauth_consumer_key', auth.consumerKey],
       ['oauth_consumer_secret', auth.consumerSecret],
       ['oauth_token', auth.accessToken],
-      ['oauth_signature_method', 'HMAC-SHA1']
+      ['oauth_signature_method', auth.serviceProvider.signatureMethod]
     ];
 
-    console.log(parameters);
+
 
   	/**
   	  *	This message object is to be fired to Yelp as part of then
@@ -178,6 +192,7 @@ ko.applyBindings(new ViewModel());
   	    'parameters' : parameters
   	};
 
+
   	/**
   	  *	Vitrually sign and send things as part of some OAuth JS Magic
   	  **/
@@ -186,8 +201,6 @@ ko.applyBindings(new ViewModel());
   	OAuth.SignatureMethod.sign(message, accessor);
   	var parameterMap = OAuth.getParameterMap(message.parameters);
   	yJax(message.action, parameterMap);
-
-    console.log(parameters);
 
   };
 
@@ -201,22 +214,34 @@ ko.applyBindings(new ViewModel());
       'data': yData,
       'dataType' : 'jsonp',
       'global': true,
+      'cache': true,
       'jsonpCallback': 'cb',
       'success' : function(data){
         makeYelpList(data);
+        console.log("data just came in");
       }
     });
   }
 
-  /**
-    *   Packaged function that turns the data from api call
-    *   observable cards and map markers taking data (d)
-    *   as parameter
-    **/
+  yelpAjax("Tacos", 80210);
 
-  function makeYelpList(d){
-      // this function will need to create the place card and make the map
+  function makeYelpList(d) {
+    response = d.businesses; // push ajax response to the global var 'response'
+
+    resultList.removeAll();  // empty the resultList
+
+    // paint the new cards to the DOM
+    response.forEach(function(place){
+      resultList.push( new placeCard(place) );
+    });
+
+
+    initMap(); // refresh map
   }
+
+
+  ////// Yelp Stops Here ///////////////////////
+
 
   function clearAllMarkers() {
     for (marker in markers){ // TODO decide if var should be markers or abstract away wtih allMarkers
@@ -242,38 +267,25 @@ function initMap() {
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: response[0].location.coordinate.latitude, lng: response[0].location.coordinate.longitude},
-    scrollwheel: false,
-    zoom: 8
+    scrollwheel: true,
+    zoom: 10
   });
 
-  // sets the position for the marker to be called in a jiffy
-  var markerLatLng = {lat: response[0].location.coordinate.latitude, lng: response[0].location.coordinate.longitude};
-
-  // adds a marker to the map
-  var marker = new google.maps.Marker({
-      position: markerLatLng,
-      map: map,
-      title: 'Beacons House'
-    });
-
-  var marker2 = new google.maps.Marker({
-      position: {lat: response[1].location.coordinate.latitude, lng: response[1].location.coordinate.longitude},
-      map: map,
-      title: 'Arties House'
+  for(var i=0 ; i<response.length; i++){
+      // create the positon object
+      var position = new google.maps.LatLng(response[i].location.coordinate.latitude, response[i].location.coordinate.longitude);
+      // create the mkr object from the marker param
+      var mkr = new google.maps.Marker({
+        position: position,
+        map: map,
+        animation: google.maps.Animation.DROP, //change to something else?
+        title: response[i].name,
+        ph: response[i].display_phone,
+        pic: response[i].image_url,
+        blurb: response[i].snippet_text,
       });
+    }
 
-  // resets the map to center when a marker is clicked
-  marker.addListener('click', function(event){
-    map.panTo({lat: marker.getPosition().lat(), lng: (marker.getPosition().lng() - 1.28)}); /** includes correction factor of -1.28
-                                                                                              * to scoot the 'center' to the right
-                                                                                              * */
-  });
-
-  marker2.addListener('click', function(event){
-    map.panTo({lat: marker2.getPosition().lat(), lng: (marker2.getPosition().lng() - 1.28)}); /** includes correction factor of -1.28
-                                                                                              * to scoot the 'center' to the right
-                                                                                              * */
-  });
 
 }
 
@@ -283,37 +295,41 @@ function initMap() {
   * any and all markers to the map
   **/
 
-function placeMarkers() {
-    for(var i=0 ; i<markers.length; i++){
-      // create the positon object
-      var positon = new google.maps.LatLng(/* TODO put the LatLng markers in here */);
-      // create the mkr object from the marker param
-      var mkr = new google.maps.Marker({
-        position: position,
-        map: map,
-        animation: google.maps.Animation.DROP, //change to something else?
-        title: "",
-        ph: "",
-        pic: "",
-        blurb: ""
-      });
-    }
+function addGoogleMapsMarkers() {
+    for(var i=0 ; i<response.length; i++){
+        // create the positon object
+        var position = new google.maps.LatLng(response[i].location.coordinate.latitude, response[i].location.coordinate.longitude);
+        // create the mkr object from the marker param
+        var mkr = new google.maps.Marker({
+          position: position,
+          map: map,
+          animation: google.maps.Animation.DROP, //change to something else?
+          title: response[i].name,
+          ph: response[i].display_phone,
+          pic: response[i].image_url,
+          blurb: response[i].snippet_text,
+        });
 
-    // push these new objects to an array variable
+      // push these new objects to an array variable
 
-    // bind mouseover to infoWindows
-    google.map.event.addListener(mrk, 'mouseover', (function(mk, i){
-        return function() {
-          makeInfoWindow(mk);
-        }
-      }));
+      // bind mouseover to infoWindows
+      google.map.event.addListener(mrk, 'mouseover', (function(mk, i){
+          return function() {
+            makeInfoWindow(mk);
+          }
+        }));
 
-    // bind click event to scroll event in DOM and create infoWindow
-    google.map.event.addListener(mkr, 'click', (function(mk,i){
-        return function(){
-          makeInfoWindow(mk);
+      // bind click event to scroll event in DOM and create infoWindow
+      google.map.event.addListener(mkr, 'click', function(event){
+        map.panTo({lat: marker.getPosition().lat(), lng: (mkr.getPosition().lng() - 1.28)}); /** includes correction factor of -1.28
+                                                                                                  * to scoot the 'center' to the right
+                                                                                                  * */
+      }, (function(mk, i){
+          return function(){
+            makeInfoWindow(mk);
           // need function with scrollTo position and change marker sytle
-        }
-    })
-  )
+          }
+        })
+      )
+  }
 }

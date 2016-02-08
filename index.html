@@ -22,10 +22,11 @@
 
       <div id="results-container">
 
-        <div id="yelp-search-box">
-          <p class="search-item">Show me:  <input data-bind="value: searchFor" type="text"></input></p>
-          <p class="search-item">in:  <input data-bind="value: searchNear" type="text"></input></p>
-        </div>
+        <Form id="yelp-search-box" class="" data-bind="submit: updateYelpResults">
+            <p class="search-item">Show me:  <input data-bind="value: searchFor" type="text"></input></p>
+            <p class="search-item">in:  <input data-bind="value: searchNear" type="text"></input></p>
+            <button id="yelp-btn" class="search-item" data-bind="click: updateYelpResults">Yelp!</button>
+        </form>
 
         <div data-bind="foreach: resultList" class="yelp-search-results">
 
@@ -38,14 +39,14 @@
                 <p data-bind="text: description" class="search-item-snippet"></p>
 
                 <div class="search-image-container">
-                  <img class="search-image" data-bind="attr: {src: img_url}">
+                  <img class="search-image" data-bind="attr: {src: imgSrc}">
                 </div>
 
                 <div class="search-item-contact-box">
 
                   <div class="search-item-address">
                     <div data-bind="text: address1" class="address-line-1"></div>
-                    <div data-bind="text: cityState" class="address-line-2"></div>
+                    <div data-bind="text: address2" class="address-line-2"></div>
                   </div>
 
                   <div class="search-item-contact">
@@ -86,14 +87,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 
   <!-- OAuth items -->
-  <script src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
-  <script src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
-  
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+<script src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
+
 <!-- Scripts Built by Dan -->
   <script src="scripts/app-engine.js"></script>
 
   <!-- GoogleMaps Approval -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClMls0bXZ3jgznlsLiP0ZgRrzSgUGFMbU&callback=initMap"></script>
+
 
 
 
