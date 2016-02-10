@@ -77,6 +77,8 @@ var placeCard = function(data) {
   var that = this;
 
   this.name = ko.observable(data.name);
+  this.id = ko.observable(data.id);
+  this.idSelector = ko.observable('Dan');//ko.computed(function(){return "#" + data.id});
   this.description = ko.observable(data.snippet_text);
   this.imgSrc = ko.observable(data.image_url);
   this.address1 = ko.observable(data.location.display_address[0]);
@@ -86,9 +88,11 @@ var placeCard = function(data) {
   this.address2 = ko.computed(function(){return that.city() + ", " + that.state() + " " + that.zip()});
   this.phone = ko.observable(data.display_phone);
   this.webURL = ko.observable(data.url);
-  this.loc = {
-    lat: data.location.coordinate.latitude,
-    lon: data.location.coordinate.longitude,
+  this.location = {
+    coordinate : {
+      latitude: data.location.coordinate.latitude,
+      longitude: data.location.coordinate.longitude,
+    },
     address: data.location.display_address[0] +
       '<br>' + data.location.display_address[data.location.display_address.length - 1]
   },
@@ -101,9 +105,19 @@ var placeCard = function(data) {
     standard: ko.observable(data.rating_img_url),
     large: ko.observable(data.rating_img_url_large),
     small: ko.observable(data.rating_img_url_small)
-  }
+  },
 
-}
+  this.marker = {
+    title: data.name,
+    phone: data.display_phone,
+    imgSrc: data.image_url,
+    description: data.snippet_text,
+    lat: data.location.coordinate.latitude,
+    lng: data.location.coordinate.longitude,
+    idSelector: "#" + data.id,
+    stars: data.rating_img_url
+  }
+};
 
 var resultList = ko.observableArray([]);
 
@@ -272,7 +286,7 @@ function initMap() {
     zoom: 12
   });
 
-  setMarkers(map, response);
+  setMarkers(map, resultList());
 	infowindow = new google.maps.InfoWindow({
         content: "loading..."
     });
@@ -290,34 +304,36 @@ function setMarkers(map, points) {
             map: map,
             clickable: true,
             animation: google.maps.Animation.DROP, // TODO change to something else?
-            title: place.name,
-            phone: place.display_phone,
-            pic: place.image_url,
-            blurb: place.snippet_text,
+            title: place.marker.title,
+            phone: place.marker.phone,
+            imgSrc: place.marker.imgSrc,
+            description: place.marker.description,
             lat: place.location.coordinate.latitude,
             lng: place.location.coordinate.longitude,
-            index: i,
-            stars: place.rating_img_url
+            idSelector: place.marker.idSelector,
+            stars: place.marker.stars
+
 
         });
 
         var contentString = "Some content";
 
         google.maps.event.addListener(marker, "click", function (event) {
-            infowindow.setContent(this.title);
+            infowindow.setContent(this.title + '<img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
+            console.log(this.idSelector);
+            console.log(this);
             map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
-            console.log(this.index);
+            $('html, body').animate({
+              scrollTop: $(this.idSelector).offset().top - 20
+              }, 600);
         });
 
         google.maps.event.addListener(marker, "mouseover", function (event) {
-            infowindow.setContent('<img src="' + this.stars + '"></img>');
+            infowindow.setContent(this.title + '<img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
         });
 
-        google.maps.event.addListener(marker, "mouseout", function (event) {
-            infowindow.close(map, this);
-        });
 
     }
 }
