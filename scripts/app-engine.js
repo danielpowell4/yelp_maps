@@ -311,8 +311,13 @@ function setMarkers(map, points) {
         });
 
         google.maps.event.addListener(marker, "mouseover", function (event) {
-            infowindow.setContent('<img src="' + this.stars + '"></img>"');
+            infowindow.setContent('<img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
         });
+
+        google.maps.event.addListener(marker, "mouseout", function (event) {
+            infowindow.close(map, this);
+        });
+
     }
 }
