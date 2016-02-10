@@ -72,8 +72,6 @@ var response =  [{
       },
     ];
 
-var markers = [];
-
 var placeCard = function(data) {
 
   var that = this;
@@ -97,10 +95,14 @@ var placeCard = function(data) {
   this.review = {
     img: data.snippet_image_url,
     txt: data.snippet_text
-  };
+  },
+  this.stars = {
+    count: ko.observable(data.rating),
+    standard: ko.observable(data.rating_img_url),
+    large: ko.observable(data.rating_img_url_large),
+    small: ko.observable(data.rating_img_url_small)
+  }
 
-  this.marker = [this.name, this.phone, this.loc.lat, this.loc.lon, this.review.img, this.review.txt];
-  markers.push(this.marker);
 }
 
 var resultList = ko.observableArray([]);
@@ -173,6 +175,8 @@ ko.applyBindings(new ViewModel());
       ['term', searchFor],
       ['location', searchNear],
       ['callback', 'cb'],
+      ['sort', 2], // '2' sorts results by rating
+      ['limit', 15], // limits results to top 15
       ['oauth_consumer_key', auth.consumerKey],
       ['oauth_consumer_secret', auth.consumerSecret],
       ['oauth_token', auth.accessToken],
@@ -223,18 +227,19 @@ ko.applyBindings(new ViewModel());
     });
   }
 
-  yelpAjax("Tacos", 80210);
+  yelpAjax(searchFor(), searchNear());
 
   function makeYelpList(d) {
     response = d.businesses; // push ajax response to the global var 'response'
 
     resultList.removeAll();  // empty the resultList
 
+    clearAllMarkers(); // clears marker array
+
     // paint the new cards to the DOM
     response.forEach(function(place){
       resultList.push( new placeCard(place) );
     });
-
 
     initMap(); // refresh map
   }
@@ -244,10 +249,6 @@ ko.applyBindings(new ViewModel());
 
 
   function clearAllMarkers() {
-    for (marker in markers){ // TODO decide if var should be markers or abstract away wtih allMarkers
-      markers[marker].setMap(null);
-    }
-
     markers = [];
   }
 
@@ -266,70 +267,52 @@ function initMap() {
 
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: response[0].location.coordinate.latitude, lng: response[0].location.coordinate.longitude},
-    scrollwheel: true,
-    zoom: 10
+    center: {lat: response[0].location.coordinate.latitude, lng: response[0].location.coordinate.longitude - 0.08},
+    scrollwheel: false,
+    zoom: 12
   });
 
-  for(var i=0 ; i<response.length; i++){
-      // create the positon object
-      var position = new google.maps.LatLng(response[i].location.coordinate.latitude, response[i].location.coordinate.longitude);
-      // create the mkr object from the marker param
-      var mkr = new google.maps.Marker({
-        position: position,
-        map: map,
-        animation: google.maps.Animation.DROP, //change to something else?
-        title: response[i].name,
-        ph: response[i].display_phone,
-        pic: response[i].image_url,
-        blurb: response[i].snippet_text,
-      });
-    }
-
+  setMarkers(map, response);
+	infowindow = new google.maps.InfoWindow({
+        content: "loading..."
+    });
 
 }
 
 
-/**
-  * function that loops through markers array and places
-  * any and all markers to the map
-  **/
+function setMarkers(map, points) {
 
-function addGoogleMapsMarkers() {
-    for(var i=0 ; i<response.length; i++){
-        // create the positon object
-        var position = new google.maps.LatLng(response[i].location.coordinate.latitude, response[i].location.coordinate.longitude);
-        // create the mkr object from the marker param
-        var mkr = new google.maps.Marker({
-          position: position,
-          map: map,
-          animation: google.maps.Animation.DROP, //change to something else?
-          title: response[i].name,
-          ph: response[i].display_phone,
-          pic: response[i].image_url,
-          blurb: response[i].snippet_text,
+    for (var i = 0; i < points.length; i++) {
+        var place = points[i];
+        var siteLatLng = new google.maps.LatLng(place.location.coordinate.latitude, place.location.coordinate.longitude);
+        var marker = new google.maps.Marker({
+            position: siteLatLng,
+            map: map,
+            clickable: true,
+            animation: google.maps.Animation.DROP, // TODO change to something else?
+            title: place.name,
+            phone: place.display_phone,
+            pic: place.image_url,
+            blurb: place.snippet_text,
+            lat: place.location.coordinate.latitude,
+            lng: place.location.coordinate.longitude,
+            index: i,
+            stars: place.rating_img_url
+
         });
 
-      // push these new objects to an array variable
+        var contentString = "Some content";
 
-      // bind mouseover to infoWindows
-      google.map.event.addListener(mrk, 'mouseover', (function(mk, i){
-          return function() {
-            makeInfoWindow(mk);
-          }
-        }));
+        google.maps.event.addListener(marker, "click", function (event) {
+            infowindow.setContent(this.title);
+            infowindow.open(map, this);
+            map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
+            console.log(this.index);
+        });
 
-      // bind click event to scroll event in DOM and create infoWindow
-      google.map.event.addListener(mkr, 'click', function(event){
-        map.panTo({lat: marker.getPosition().lat(), lng: (mkr.getPosition().lng() - 1.28)}); /** includes correction factor of -1.28
-                                                                                                  * to scoot the 'center' to the right
-                                                                                                  * */
-      }, (function(mk, i){
-          return function(){
-            makeInfoWindow(mk);
-          // need function with scrollTo position and change marker sytle
-          }
-        })
-      )
-  }
+        google.maps.event.addListener(marker, "mouseover", function (event) {
+            infowindow.setContent('<img src="' + this.stars + '"></img>"');
+            infowindow.open(map, this);
+        });
+    }
 }

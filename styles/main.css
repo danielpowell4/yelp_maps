@@ -82,10 +82,13 @@ h1 {
   font-size: 24px;
   line-height: 28px;
   text-transform: uppercase;
+  display: inline-block;
 }
 
 .search-item-counter {
   color: green;
+  display: inline-block;
+  padding-right: .25em;
 }
 
 .search-image-container {

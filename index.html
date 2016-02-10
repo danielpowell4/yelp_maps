@@ -30,11 +30,12 @@
 
         <div data-bind="foreach: resultList" class="yelp-search-results">
 
-            <div class="result-card" id="card1">
+            <div class="result-card" id="">
 
-                <h3 data-bind="text: name" class="search-item-title">
-                    <span class="search-item-counter"></span>
-                </h3>
+              <div class="place-title">
+                <h1 class="search-item-counter" data-bind="text: ($index() + 1)"></h1>
+                <h3 class="search-item-title" data-bind="text: name" ></h3>
+              </div>
 
                 <p data-bind="text: description" class="search-item-snippet"></p>
 
@@ -82,6 +83,8 @@
 
 <!-- jQuery to the rescue -->
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<!-- underscore has some nice stuff too-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
 <!-- knockout with the big bang bam -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
