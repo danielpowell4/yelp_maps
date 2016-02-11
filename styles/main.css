@@ -36,7 +36,7 @@ nav {
 
 
 #logo {
-  margin: 10px 0 0 15px;
+  margin: 0 0 0 15px;
   background-color: red;
   height: 46px;
   width: 170px;
@@ -65,7 +65,7 @@ h1 {
     width: 60%;
     max-width: 485px;
     position: relative;
-    top: 60px;
+    top: 20px;
     left: 25px;
     overflow-y: auto;
     z-index: 5;

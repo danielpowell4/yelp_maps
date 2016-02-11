@@ -78,7 +78,7 @@ var placeCard = function(data) {
 
   this.name = ko.observable(data.name);
   this.id = ko.observable(data.id);
-  this.idSelector = ko.observable('Dan');//ko.computed(function(){return "#" + data.id});
+  this.idSelector = ko.computed(function(){return "#" + data.id});
   this.description = ko.observable(data.snippet_text);
   this.imgSrc = ko.observable(data.image_url);
   this.address1 = ko.observable(data.location.display_address[0]);
@@ -255,6 +255,8 @@ ko.applyBindings(new ViewModel());
       resultList.push( new placeCard(place) );
     });
 
+    scrollingTriggersMarkers(); // when card passed in DOM marker infowindow opens
+    forceTop(); // ensure DOM is scrolled to top
     initMap(); // refresh map
   }
 
@@ -262,9 +264,14 @@ ko.applyBindings(new ViewModel());
   ////// Yelp Stops Here ///////////////////////
 
 
+  var activeMarkers = [];
+
+
   function clearAllMarkers() {
-    markers = [];
+      markers = [];
+      activeMarkers = [];
   }
+
 
 /**
   *   ------------------------------------
@@ -290,9 +297,7 @@ function initMap() {
 	infowindow = new google.maps.InfoWindow({
         content: "loading..."
     });
-
 }
-
 
 function setMarkers(map, points) {
 
@@ -312,28 +317,72 @@ function setMarkers(map, points) {
             lng: place.location.coordinate.longitude,
             idSelector: place.marker.idSelector,
             stars: place.marker.stars
-
-
         });
+
+        activeMarkers.push(marker);
 
         var contentString = "Some content";
 
         google.maps.event.addListener(marker, "click", function (event) {
-            infowindow.setContent(this.title + '<img src="' + this.stars + '"></img>');
+            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
-            console.log(this.idSelector);
-            console.log(this);
             map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
             $('html, body').animate({
               scrollTop: $(this.idSelector).offset().top - 20
               }, 600);
+            $(".gm-style-iw").next("div").css( 'display', 'none' ); // hide the close control
         });
 
         google.maps.event.addListener(marker, "mouseover", function (event) {
-            infowindow.setContent(this.title + '<img src="' + this.stars + '"></img>');
+            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
+            $(".gm-style-iw").next("div").hide(); // hide the close control
         });
+
+  //  ------  DoubleClick listener used as the DOM Scrolling Trigger -------------------
+
+        google.maps.event.addListener(marker, "dblclick", function (event) {
+            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
+            infowindow.open(map, this);
+            map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
+            $(".gm-style-iw").next("div").hide(); // hide the close control
+        });
+
+    }
+    forceTop();
+}
+
+
+function OpenInfowindowForMarker(index) {
+    //var index = (listing - 1);
+    google.maps.event.trigger(activeMarkers[index], 'dblclick');
+}
+
+/**
+  *
+  *   Vars that to help monitor the DOM and trigger events when appropriate
+  *
+  **/
+
+function scrollingTriggersMarkers(){
+  $(window).scroll(function () {
+    var pixelsScrolled = $(window).scrollTop();
+    for (resultCard in resultList()) {
+      var resultOffset = $(resultList()[resultCard].idSelector()).offset().top;
+
+      if (resultOffset - pixelsScrolled < 40 && resultOffset - pixelsScrolled > -40){
+        OpenInfowindowForMarker(resultCard);
+        console.log(resultCard);
+      }
 
 
     }
+
+  });
 }
+
+  function forceTop(){
+    $('html, body').animate({
+        scrollTop: $('body').offset().top + 137
+      }, 300);
+  }
