@@ -344,7 +344,7 @@ function setMarkers(map, points) {
         google.maps.event.addListener(marker, "dblclick", function (event) {
             infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
-            map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
+            //map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
             $(".gm-style-iw").next("div").hide(); // hide the close control
         });
 
@@ -358,10 +358,14 @@ function OpenInfowindowForMarker(index) {
     google.maps.event.trigger(activeMarkers[index], 'dblclick');
 }
 
-/**
-  *
+/**  ------------------------------------------------------------------------
   *   Vars that to help monitor the DOM and trigger events when appropriate
-  *
+  *  ------------------------------------------------------------------------ */
+
+/**
+  *  scrollingTriggersMarkers: as the window scrolls it stores the pixel count
+  *  and then compares that to the offsets of each of the result card
+  *  divs when the window is approaching a top it triggers the dbllick event Listener
   **/
 
 function scrollingTriggersMarkers(){
@@ -370,9 +374,9 @@ function scrollingTriggersMarkers(){
     for (resultCard in resultList()) {
       var resultOffset = $(resultList()[resultCard].idSelector()).offset().top;
 
-      if (resultOffset - pixelsScrolled < 40 && resultOffset - pixelsScrolled > -40){
+      if (resultOffset - pixelsScrolled < 40 && resultOffset - pixelsScrolled > -60){
         OpenInfowindowForMarker(resultCard);
-        console.log(resultCard);
+        //console.log(resultCard);
       }
 
 
@@ -380,6 +384,8 @@ function scrollingTriggersMarkers(){
 
   });
 }
+
+  // force scroll the resultCards in the DOM to the top
 
   function forceTop(){
     $('html, body').animate({
