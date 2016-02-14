@@ -38,7 +38,7 @@ nav {
 
 #logo {
   margin: 0 0 0 15px;
-  background-color: #0BA;
+  background-color: #EE8060;
   height: 46px;
   width: 170px;
   max-width: 170px;
@@ -73,9 +73,10 @@ input {
     border: 0;
     margin: 10px;
     padding: 0 1.5em;
-    border-radius: 14px;
+    border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
+    height: 3em;
 }
 
 #yelp-btn:hover{
@@ -235,6 +236,8 @@ svg.search-item-social-buttons-icon:hover{
   margin: 2px auto -8px;
 }
 
+/* Changes for smaller screens */
+
 @media screen and (max-width: 660px){
   .infowindow-title {
     max-width: 84px;
@@ -242,4 +245,10 @@ svg.search-item-social-buttons-icon:hover{
   #results-container{
     left: 1px;
   }
+  .search-item-contact-box {
+    display: none;
+  }
+  .search-image-container {
+    margin: 0 -20px 10px;
+}
 }
