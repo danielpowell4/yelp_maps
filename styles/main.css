@@ -1,6 +1,7 @@
 body {
   margin: 0;
   color: #292929;
+  font-family: 'Montserrat', sans-serif;
 }
 
 p {
@@ -86,7 +87,7 @@ h1 {
 }
 
 .search-item-counter {
-  color: green;
+  color: red;
   display: inline-block;
   padding-right: .25em;
 }
@@ -149,15 +150,15 @@ img.search-image{
 }
 
 a.search-item-directions  {
-  font-size: 12px;
-  padding-top: 3px;
-  padding-bottom: 5px;
+  font-size: 1em;
+  padding: 1em 2em;
+  border-radius: 2em;
   margin: 0 auto 10px;
   text-decoration: none;
   background-color: red;
   color: #fff;
   display: block;
-  max-width: 105px;
+  max-width: 10em;
   text-align: center;
 }
 
@@ -184,4 +185,12 @@ a.search-item-directions  {
 
 .search-item-social li {
   display: inline-block;
+}
+
+svg.search-item-social-buttons-icon {
+  fill: red;
+}
+
+svg.search-item-social-buttons-icon:hover{
+  fill: blue;
 }

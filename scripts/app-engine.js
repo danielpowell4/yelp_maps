@@ -93,7 +93,6 @@ var placeCard = function(data) {
   this.address2 = ko.computed(function(){return that.city() + ", " + that.state() + " " + that.zip()});
   this.phone = ko.observable(data.display_phone);
   this.webURL = ko.observable(data.url);
-  this.googleDirections = ko.computed(function(){return "//google.com/maps?q=" + data.location.display_address[0] + '+' + data.location.city  + '+' + data.location.state_code});
   this.location = {
     coordinate : {
       latitude: data.location.coordinate.latitude,
@@ -101,18 +100,17 @@ var placeCard = function(data) {
     },
     address: data.location.display_address[0] +
       '<br>' + data.location.display_address[data.location.display_address.length - 1]
-  },
+  };
   this.review = {
     img: data.snippet_image_url,
     txt: data.snippet_text
-  },
+  };
   this.stars = {
     count: ko.observable(data.rating),
     standard: ko.observable(data.rating_img_url),
     large: ko.observable(data.rating_img_url_large),
     small: ko.observable(data.rating_img_url_small)
-  },
-
+  };
   this.marker = {
     title: data.name,
     phone: data.display_phone,
@@ -122,7 +120,10 @@ var placeCard = function(data) {
     lng: data.location.coordinate.longitude,
     idSelector: "#" + data.id,
     stars: data.rating_img_url
-  }
+  };
+  this.googleDirections = ko.computed(function(){return "//google.com/maps?q=" + data.location.display_address[0] + '+' + data.location.city  + '+' + data.location.state_code});
+  this.facebookShare = ko.computed(function(){return "//www.facebook.com/sharer/sharer.php?u=" + data.url });
+  this.twitterShare = ko.computed(function(){return "//twitter.com/intent/tweet?text=OMG " + data.name + " is an awesome spot for " + searchFor() + " in " + searchNear() + "&amp;url=" + data.url + ";via=dangerdan"})
 };
 
 var resultList = ko.observableArray([]);
