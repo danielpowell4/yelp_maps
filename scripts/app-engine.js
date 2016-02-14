@@ -72,6 +72,11 @@ var response =  [{
       },
     ];
 
+var errorMessage = {
+  'name' : 'Oh No!',
+  'snippet_text' : 'We were unable to find any results. Please check your search and try again.'
+};
+
 var placeCard = function(data) {
 
   var that = this;
@@ -80,7 +85,7 @@ var placeCard = function(data) {
   this.id = ko.observable(data.id);
   this.idSelector = ko.computed(function(){return "#" + data.id});
   this.description = ko.observable(data.snippet_text);
-  this.imgSrc = ko.observable(data.image_url);
+  this.imgSrc = ko.computed(function(){return data.image_url.replace('ms.jpg', 'l.jpg')});
   this.address1 = ko.observable(data.location.display_address[0]);
   this.city =  ko.observable(data.location.city);
   this.state = ko.observable(data.location.state_code);
@@ -201,7 +206,7 @@ ko.applyBindings(new ViewModel());
 
   	/**
   	  *	This message object is to be fired to Yelp as part of then
-      * OAuth.setTimestampAndNonce TODO: make this server-side
+      * OAuth.setTimestampAndNonce TODO: someday make this server-side
   	  **/
 
   	var message = {
@@ -228,6 +233,8 @@ ko.applyBindings(new ViewModel());
 
   function yJax(url, yData){
     $.ajax({
+      'timeout': 3000,
+      'type': 'GET',
       'url': url,
       'data': yData,
       'dataType' : 'jsonp',
@@ -237,7 +244,13 @@ ko.applyBindings(new ViewModel());
       'success' : function(data){
         makeYelpList(data);
         console.log("data just came in");
-      }
+      },
+      'error': function() {
+         alert("oh no! it didn't work!!");
+      },
+
+
+
     });
   }
 
@@ -264,12 +277,12 @@ ko.applyBindings(new ViewModel());
   ////// Yelp Stops Here ///////////////////////
 
 
-  var activeMarkers = [];
-
+  var currentMarkers = [];
+  var activeMarker = ko.observable();
 
   function clearAllMarkers() {
       markers = [];
-      activeMarkers = [];
+      currentMarkers = [];
   }
 
 
@@ -288,7 +301,7 @@ function initMap() {
 
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: response[0].location.coordinate.latitude, lng: response[0].location.coordinate.longitude - 0.08},
+    center: {lat: response[0].location.coordinate.latitude - 0.04, lng: response[0].location.coordinate.longitude - 0.08},
     scrollwheel: false,
     zoom: 12
   });
@@ -297,6 +310,24 @@ function initMap() {
 	infowindow = new google.maps.InfoWindow({
         content: "loading..."
     });
+}
+
+var activeIcon = {
+    path: "M10,0.5c2.7-0.1,6.6,1.8,7.1,7c0.4,5.2-7.1,11.6-7.1,11.6l0,0c0,0-7.5-6.4-7.1-11.6C3.4,2.3,7.2,0.5,10,0.5",
+    fillColor: '#FFF',
+    fillOpacity: 1,
+    strokeWeight: 4,
+    strokeColor: '#f00',
+    scale:2.5,
+  };
+
+var restingIcon = {
+  path: "M10,0.5c2.7-0.1,6.6,1.8,7.1,7c0.4,5.2-7.1,11.6-7.1,11.6l0,0c0,0-7.5-6.4-7.1-11.6C3.4,2.3,7.2,0.5,10,0.5",
+  fillColor: '#F00',
+  fillOpacity: 0.6,
+  strokeWeight: 4,
+  strokeColor: '#fff',
+  scale:2.5,
 }
 
 function setMarkers(map, points) {
@@ -309,6 +340,7 @@ function setMarkers(map, points) {
             map: map,
             clickable: true,
             animation: google.maps.Animation.DROP, // TODO change to something else?
+            icon: restingIcon,
             title: place.marker.title,
             phone: place.marker.phone,
             imgSrc: place.marker.imgSrc,
@@ -319,44 +351,59 @@ function setMarkers(map, points) {
             stars: place.marker.stars
         });
 
-        activeMarkers.push(marker);
+        currentMarkers.push(marker);
 
         var contentString = "Some content";
 
         google.maps.event.addListener(marker, "click", function (event) {
-            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
-            infowindow.open(map, this);
-            map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
-            $('html, body').animate({
+            resetMarkerIcons();
+            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>'); //set infowindow Content
+            infowindow.open(map, this);  // open the infowindow
+            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.08)}); // center map to marker with shift for search
+            $('html, body').animate({     // move the DOM listings to the marker that was just clicked
               scrollTop: $(this.idSelector).offset().top - 20
-              }, 600);
-            $(".gm-style-iw").next("div").css( 'display', 'none' ); // hide the close control
+              }, 100);
+            $(".gm-style-iw").next("div").css( 'display', 'none' ); // hide the close control in infowindow
+            this.setIcon(activeIcon); // swap out icon from resting to active
+            this.setZIndex(5);  // have marker be on top
+
         });
 
         google.maps.event.addListener(marker, "mouseover", function (event) {
+            resetMarkerIcons();
             infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
+            this.setIcon(activeIcon);
+            this.setZIndex(5);
             $(".gm-style-iw").next("div").hide(); // hide the close control
         });
+
 
   //  ------  DoubleClick listener used as the DOM Scrolling Trigger -------------------
 
         google.maps.event.addListener(marker, "dblclick", function (event) {
+            resetMarkerIcons();
+            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.08)}); // center map to marker with shift for search
             infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
-            //map.panTo({lat: (this.lat - 0.02), lng: (this.lng - 0.08)});
+            this.setIcon(activeIcon);
+            this.setZIndex(5);
             $(".gm-style-iw").next("div").hide(); // hide the close control
+
         });
 
-    }
+    };
     forceTop();
 }
 
-
-function OpenInfowindowForMarker(index) {
-    //var index = (listing - 1);
-    google.maps.event.trigger(activeMarkers[index], 'dblclick');
+function resetMarkerIcons() {
+    //  reset all the icons back to normal except the one you clicked
+    for (var i = 0; i < currentMarkers.length; i++) {
+        currentMarkers[i].setIcon(restingIcon);
+        currentMarkers[i].setZIndex(4);
+    }
 }
+
 
 /**  ------------------------------------------------------------------------
   *   Vars that to help monitor the DOM and trigger events when appropriate
@@ -368,22 +415,27 @@ function OpenInfowindowForMarker(index) {
   *  divs when the window is approaching a top it triggers the dbllick event Listener
   **/
 
-function scrollingTriggersMarkers(){
-  $(window).scroll(function () {
-    var pixelsScrolled = $(window).scrollTop();
-    for (resultCard in resultList()) {
-      var resultOffset = $(resultList()[resultCard].idSelector()).offset().top;
+  function OpenInfowindowForMarker(index) {
+      //var index = (listing - 1);
+      google.maps.event.trigger(currentMarkers[index], 'dblclick');
+  }
 
-      if (resultOffset - pixelsScrolled < 40 && resultOffset - pixelsScrolled > -60){
-        OpenInfowindowForMarker(resultCard);
-        //console.log(resultCard);
+  function scrollingTriggersMarkers(){
+    $(window).scroll(function () {
+      var pixelsScrolled = $(window).scrollTop();
+      for (resultCard in resultList()) {
+        var resultOffset = $(resultList()[resultCard].idSelector()).offset().top;
+
+        if (resultOffset - pixelsScrolled < 40 && resultOffset - pixelsScrolled > -60){
+          OpenInfowindowForMarker(resultCard);
+          //console.log(resultCard);
+        }
+
+
       }
 
-
-    }
-
-  });
-}
+    });
+  }
 
   // force scroll the resultCards in the DOM to the top
 
