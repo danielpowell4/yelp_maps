@@ -16,7 +16,7 @@ var response =  [{
     'id' : '12309120',
     'name' : "Beacon's House",
     'snippet_text' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
-    'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-#EE8060-room-01.jpg",
+    'image_url' : '',//"http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-#EE8060-room-01.jpg",
     'address1' : '2950 Camozzi Rd',
     'cityState' : 'Revelstoke, BC',
     'display_phone' : '250 814 0087',
@@ -53,7 +53,7 @@ var response =  [{
         'id' : '12309120',
         'name' : "Beacon's House #2",
         'snippet_text' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
-        'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-#EE8060-room-01.jpg",
+        'image_url' : '',//"http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-#EE8060-room-01.jpg",
         'address1' : '2950 Camozzi Rd',
         'cityState' : 'Revelstoke, BC',
         'display_phone' : '250 814 0087',
@@ -332,6 +332,11 @@ var restingIcon = {
   scale:2.5,
 }
 
+var mapShift = {
+  right: 0.08,
+  up: 0.04
+}
+
 function setMarkers(map, points) {
 
     for (var i = 0; i < points.length; i++) {
@@ -362,7 +367,7 @@ function setMarkers(map, points) {
             resetMarkerIcons();
             infowindow.setContent(this.windowContent); //set infowindow Content
             infowindow.open(map, this);  // open the infowindow
-            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.07)}); // center map to marker with shift for search
+            map.panTo({lat: (this.lat - mapShift.up), lng: (this.lng - mapShift.right)}); // center map to marker with shift for search
             $('html, body').animate({     // move the DOM listings to the marker that was just clicked
               scrollTop: $(this.idSelector).offset().top - 20
               }, 100);
@@ -386,7 +391,7 @@ function setMarkers(map, points) {
 
         google.maps.event.addListener(marker, "dblclick", function (event) {
             resetMarkerIcons();
-            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.07)}); // center map to marker with shift for search
+            map.panTo({lat: (this.lat - mapShift.up), lng: (this.lng - mapShift.right)}); // center map to marker with shift for search
             infowindow.setContent(this.windowContent);
             infowindow.open(map, this);
             this.setIcon(activeIcon);
@@ -429,7 +434,7 @@ function resetMarkerIcons() {
       for (resultCard in resultList()) {
         var resultOffset = $(resultList()[resultCard].idSelector()).offset().top;
 
-        if (resultOffset - pixelsScrolled < 40 && resultOffset - pixelsScrolled > -60){
+        if (resultOffset - pixelsScrolled < 60 && resultOffset - pixelsScrolled > -60){
           OpenInfowindowForMarker(resultCard);
           //console.log(resultCard);
         }

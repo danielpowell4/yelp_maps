@@ -235,8 +235,11 @@ svg.search-item-social-buttons-icon:hover{
   margin: 2px auto -8px;
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 660px){
   .infowindow-title {
     max-width: 84px;
+  }
+  #results-container{
+    left: 1px;
   }
 }
