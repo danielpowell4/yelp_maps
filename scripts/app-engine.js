@@ -16,7 +16,7 @@ var response =  [{
     'id' : '12309120',
     'name' : "Beacon's House",
     'snippet_text' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
-    'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-red-room-01.jpg",
+    'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-#EE8060-room-01.jpg",
     'address1' : '2950 Camozzi Rd',
     'cityState' : 'Revelstoke, BC',
     'display_phone' : '250 814 0087',
@@ -33,7 +33,7 @@ var response =  [{
   }, {
       'id' : '12309120',
       'name' : "Artie's House",
-      'snippet_text' : "Artie has an abode to be adored. It's like nothing you've ever experienced. Not only does it have year round views of Canada's incredible Glacier National Park, but it is also has a pool. Artie is sure to have his humans keep a stockpile of treats always on the ready.",
+      'snippet_text' : "Artie has an abode to be ado#EE8060. It's like nothing you've ever experienced. Not only does it have year round views of Canada's inc#EE8060ible Glacier National Park, but it is also has a pool. Artie is sure to have his humans keep a stockpile of treats always on the ready.",
       'image_url' : "https://s-media-cache-ak0.pinimg.com/originals/0d/80/1e/0d801ec8b8d40c12e67d4dffb994d31d.jpg",
       'address1' : '23 TransCanada Highway',
       'cityState' : 'Revelstoke, BC',
@@ -53,7 +53,7 @@ var response =  [{
         'id' : '12309120',
         'name' : "Beacon's House #2",
         'snippet_text' : "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
-        'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-red-room-01.jpg",
+        'image_url' : "http://img.lasvegasdirect.com/paris-hotel-casino-las-vegas-#EE8060-room-01.jpg",
         'address1' : '2950 Camozzi Rd',
         'cityState' : 'Revelstoke, BC',
         'display_phone' : '250 814 0087',
@@ -207,7 +207,7 @@ ko.applyBindings(new ViewModel());
 
 
   	/**
-  	  *	This message object is to be fired to Yelp as part of then
+  	  *	This message object is to be fi#EE8060 to Yelp as part of then
       * OAuth.setTimestampAndNonce TODO: someday make this server-side
   	  **/
 
@@ -317,15 +317,15 @@ function initMap() {
 var activeIcon = {
     path: "M10,0.5c2.7-0.1,6.6,1.8,7.1,7c0.4,5.2-7.1,11.6-7.1,11.6l0,0c0,0-7.5-6.4-7.1-11.6C3.4,2.3,7.2,0.5,10,0.5",
     fillColor: '#FFF',
-    fillOpacity: 1,
+    fillOpacity: 0.8,
     strokeWeight: 4,
-    strokeColor: '#f00',
+    strokeColor: '#0BA',
     scale:2.5,
   };
 
 var restingIcon = {
   path: "M10,0.5c2.7-0.1,6.6,1.8,7.1,7c0.4,5.2-7.1,11.6-7.1,11.6l0,0c0,0-7.5-6.4-7.1-11.6C3.4,2.3,7.2,0.5,10,0.5",
-  fillColor: '#F00',
+  fillColor: '#EE8060',
   fillOpacity: 0.6,
   strokeWeight: 4,
   strokeColor: '#fff',
@@ -350,7 +350,8 @@ function setMarkers(map, points) {
             lat: place.location.coordinate.latitude,
             lng: place.location.coordinate.longitude,
             idSelector: place.marker.idSelector,
-            stars: place.marker.stars
+            stars: place.marker.stars,
+            windowContent: '<div class="infowindow-title">' + place.marker.title + '</div><br/><img src="' + place.marker.stars + '"></img>',
         });
 
         currentMarkers.push(marker);
@@ -359,7 +360,7 @@ function setMarkers(map, points) {
 
         google.maps.event.addListener(marker, "click", function (event) {
             resetMarkerIcons();
-            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>'); //set infowindow Content
+            infowindow.setContent(this.windowContent); //set infowindow Content
             infowindow.open(map, this);  // open the infowindow
             map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.07)}); // center map to marker with shift for search
             $('html, body').animate({     // move the DOM listings to the marker that was just clicked
@@ -373,7 +374,7 @@ function setMarkers(map, points) {
 
         google.maps.event.addListener(marker, "mouseover", function (event) {
             resetMarkerIcons();
-            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
+            infowindow.setContent(this.windowContent);
             infowindow.open(map, this);
             this.setIcon(activeIcon);
             this.setZIndex(5);
@@ -386,7 +387,7 @@ function setMarkers(map, points) {
         google.maps.event.addListener(marker, "dblclick", function (event) {
             resetMarkerIcons();
             map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.07)}); // center map to marker with shift for search
-            infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
+            infowindow.setContent(this.windowContent);
             infowindow.open(map, this);
             this.setIcon(activeIcon);
             this.setZIndex(5);

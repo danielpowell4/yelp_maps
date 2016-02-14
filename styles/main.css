@@ -38,7 +38,7 @@ nav {
 
 #logo {
   margin: 0 0 0 15px;
-  background-color: red;
+  background-color: #0BA;
   height: 46px;
   width: 170px;
   max-width: 170px;
@@ -60,6 +60,26 @@ h1 {
 
 .search-item {
   padding: 0 .5em;
+}
+
+input {
+    max-width: 9em;
+}
+
+#yelp-btn{
+    background-color: #EE8060;
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    border: 0;
+    margin: 10px;
+    padding: 0 1.5em;
+    border-radius: 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#yelp-btn:hover{
+    background-color: #ff7056;
 }
 
 #results-container {
@@ -87,7 +107,7 @@ h1 {
 }
 
 .search-item-counter {
-  color: red;
+  color: #0BA;
   display: inline-block;
   padding-right: .25em;
 }
@@ -137,12 +157,13 @@ img.search-image{
 }
 
 .contact-line-1 a {
-  color: red;
+  color: #0BA;
   text-decoration: none;
 }
 
 .contact-line-1 a:hover {
   text-decoration: underline;
+  color: #1ab;
 }
 
 .search-image-classification {
@@ -155,11 +176,15 @@ a.search-item-directions  {
   border-radius: 2em;
   margin: 0 auto 10px;
   text-decoration: none;
-  background-color: red;
+  background-color: #0BA;
   color: #fff;
   display: block;
   max-width: 10em;
   text-align: center;
+}
+
+a.search-item-directions:hover  {
+  background-color: #1ab;
 }
 
 .search-item-social {
@@ -188,9 +213,23 @@ a.search-item-directions  {
 }
 
 svg.search-item-social-buttons-icon {
-  fill: red;
+  fill: #0BA;
 }
 
 svg.search-item-social-buttons-icon:hover{
-  fill: blue;
+  fill: #1ab;
+}
+
+.gm-style{
+  margin: 2px auto;
+  text-align: center;
+  padding: 6px;
+}
+
+
+.infowindow-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  text-transform: capitalize;
+  margin: 2px auto -8px;
 }
