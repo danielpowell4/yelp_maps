@@ -93,6 +93,7 @@ var placeCard = function(data) {
   this.address2 = ko.computed(function(){return that.city() + ", " + that.state() + " " + that.zip()});
   this.phone = ko.observable(data.display_phone);
   this.webURL = ko.observable(data.url);
+  this.googleDirections = ko.computed(function(){return "//google.com/maps?q=" + data.location.display_address[0] + '+' + data.location.city  + '+' + data.location.state_code});
   this.location = {
     coordinate : {
       latitude: data.location.coordinate.latitude,
@@ -301,7 +302,7 @@ function initMap() {
 
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: response[0].location.coordinate.latitude - 0.04, lng: response[0].location.coordinate.longitude - 0.08},
+    center: {lat: response[0].location.coordinate.latitude - 0.04, lng: response[0].location.coordinate.longitude - 0.07},
     scrollwheel: false,
     zoom: 12
   });
@@ -359,7 +360,7 @@ function setMarkers(map, points) {
             resetMarkerIcons();
             infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>'); //set infowindow Content
             infowindow.open(map, this);  // open the infowindow
-            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.08)}); // center map to marker with shift for search
+            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.07)}); // center map to marker with shift for search
             $('html, body').animate({     // move the DOM listings to the marker that was just clicked
               scrollTop: $(this.idSelector).offset().top - 20
               }, 100);
@@ -383,7 +384,7 @@ function setMarkers(map, points) {
 
         google.maps.event.addListener(marker, "dblclick", function (event) {
             resetMarkerIcons();
-            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.08)}); // center map to marker with shift for search
+            map.panTo({lat: (this.lat - 0.04), lng: (this.lng - 0.07)}); // center map to marker with shift for search
             infowindow.setContent(this.title + '<br/><img src="' + this.stars + '"></img>');
             infowindow.open(map, this);
             this.setIcon(activeIcon);
