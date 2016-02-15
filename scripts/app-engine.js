@@ -396,7 +396,7 @@ function setMarkers(map, points) {
 
     /*  ---  function needed for cleaning up infowindows ---  */
     function hideInfoWindowCloseControl() {
-        $(".gm-style-iw").next("div").css('display', 'none');
+      //  $(".gm-style-iw").next("div").css('display', 'none'); // this function gets rid of close btn in infowindows
     }
 
     /*  ---  function gives all markers resting icon and a base layering ---  */
@@ -404,6 +404,7 @@ function setMarkers(map, points) {
         for (var i = 0; i < currentMarkers.length; i++) {
             currentMarkers[i].setIcon(markerIcon.resting);
             currentMarkers[i].setZIndex(4);
+            currentMarkers[i].setAnimation(null); // turn BOUNCE Animation off
         }
     }
 
@@ -443,6 +444,7 @@ function setMarkers(map, points) {
             infowindow.setContent(this.windowContent); // set infowindow Content
             infowindow.open(map, this); // open the infowindow
             hideInfoWindowCloseControl(); // hide infoWindow close control
+            this.setAnimation(google.maps.Animation.BOUNCE); // bounce on click
             map.panTo({
                 lat: (this.lat - mapShift.up),
                 lng: (this.lng - mapShift.right)
