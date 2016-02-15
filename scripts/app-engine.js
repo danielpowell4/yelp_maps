@@ -81,6 +81,7 @@ var placeCard = function(data) {
     this.imgSrc = ko.computed(function() {
         return data.image_url.replace('ms.jpg', 'l.jpg');
     });
+    this.imgAltTag = ko.computed(function(){return 'Photo of ' + data.name});
     this.address1 = ko.observable(data.location.display_address[0]);
     this.city = ko.observable(data.location.city);
     this.state = ko.observable(data.location.state_code);

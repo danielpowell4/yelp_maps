@@ -24,8 +24,8 @@
       <div id="results-container">
 
         <Form id="yelp-search-box" class="" data-bind="submit: updateYelpResults">
-            <p class="search-item">Show me:  <input data-bind="value: searchFor" type="text"></input></p>
-            <p class="search-item">in:  <input data-bind="value: searchNear" type="text"></input></p>
+            <p class="search-item">Show me:  <input data-bind="value: searchFor" type="text" /></p>
+            <p class="search-item">in:  <input data-bind="value: searchNear" type="text" /></p>
             <button id="yelp-btn" class="search-item" data-bind="click: updateYelpResults">Yelp!</button>
         </form>
 
@@ -41,7 +41,7 @@
                 <p data-bind="text: description" class="search-item-snippet"></p>
 
                 <div class="search-image-container">
-                  <img class="search-image" data-bind="attr: {src: imgSrc}">
+                  <img class="search-image" data-bind="attr: {src: imgSrc, alt: imgAltTag}">
                 </div>
 
                 <div class="search-item-contact-box">
