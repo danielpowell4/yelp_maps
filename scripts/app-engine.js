@@ -149,6 +149,10 @@ function updateYelpResults() {
     yelpAjax(searchFor(), searchNear()); // get all the needed info
 }
 
+function hideYelpResults() {
+    $('.yelp-search-results').toggleClass('hidden');
+}
+
 /*
  *   -------------------------------------------------------------------------
  *      ViewModel, binding and DOM input elements in the form of observables
@@ -333,6 +337,7 @@ var currentMarkers = [];
 function clearAllMarkers() {
     currentMarkers = [];
 }
+
 
 /*
  *  ---------------------------------------------------------------

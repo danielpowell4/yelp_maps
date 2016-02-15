@@ -15,6 +15,7 @@
       <nav>
         <div id="logo"><h1 style="padding:10px;">LOGO</h1>
         </div>
+        <button class="hide-btn" data-bind="click: hideYelpResults">Hide List</button>
       </nav>
 
     <div class="map-wrapper" id="map"></div>
@@ -23,11 +24,13 @@
 
       <div id="results-container">
 
-        <Form id="yelp-search-box" class="" data-bind="submit: updateYelpResults">
+        <Form class="yelp-form-box" data-bind="submit: updateYelpResults">
             <p class="search-item">Show me:  <input data-bind="value: searchFor" type="text" /></p>
             <p class="search-item">in:  <input data-bind="value: searchNear" type="text" /></p>
-            <button id="yelp-btn" class="search-item" data-bind="click: updateYelpResults">Yelp!</button>
+            <button class="yelp-btn" class="search-item" data-bind="click: updateYelpResults">Yelp!</button>
         </form>
+
+
 
         <div data-bind="foreach: resultList" class="yelp-search-results">
 
@@ -85,23 +88,23 @@
   </body>
 
 <!-- jQuery to the rescue -->
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
 <!-- underscore has some nice stuff too-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
 <!-- knockout with the big bang bam -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 
-  <!-- OAuth items -->
+<!-- OAuth items -->
 <script src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
 <script src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
 
 <!-- Scripts Built by Dan -->
-  <script src="scripts/app-engine.js"></script>
+<script src="scripts/app-engine.js"></script>
 
-  <!-- GoogleMaps Approval -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClMls0bXZ3jgznlsLiP0ZgRrzSgUGFMbU&callback=initMap"></script>
-
+<!-- GoogleMaps Approval -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClMls0bXZ3jgznlsLiP0ZgRrzSgUGFMbU&callback=initMap" onerror="googleError()"></script>
 
 
 
