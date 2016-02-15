@@ -263,7 +263,7 @@ function yJax(url, yData) {
             console.log("data just came in");
         },
         'error': function() {
-            makeYelpList(errorMessage);
+            makeErrorList();
             console.log("oh no! it didn't work!!");
         },
     });
@@ -291,6 +291,19 @@ function makeYelpList(d) {
     scrollingTriggersMarkers(); // activate scroll position monitor triggers
     forceTop(); // ensure DOM is scrolled to top
     initMap(); // refresh and reconstruct map
+}
+
+function makeErrorList(){
+  /*  ---  Clean up the old lists ---  */
+  resultList.removeAll(); // empty the resultList
+  clearAllMarkers(); // clears marker array
+
+  /*  ---  Display the error message  ---  */
+  resultList.push(new placeCard(errorMessage)); // place cards into observables
+
+  /*  ---  clean up the view  ---  */
+  forceTop(); // ensure DOM is scrolled to top
+  initMap(); // refresh and reconstruct map
 }
 
 /*
