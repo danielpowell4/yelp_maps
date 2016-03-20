@@ -99,7 +99,7 @@ var placeCard = function(data) {
         return data.image_url.replace('ms.jpg', 'l.jpg');
     });
     this.imgAltTag = ko.computed(function() {
-        return 'Photo of ' + data.name
+        return 'Photo of ' + data.name;
     });
     this.address1 = ko.observable(data.location.display_address[0]);
     this.city = ko.observable(data.location.city);
@@ -181,13 +181,6 @@ var searchNear = ko.observable("80210"); // form Yelp Search Form with prepopula
 
 var ViewModel = function() {
     var self = this;
-
-    /* -- Beacon data --
-          response.forEach(function(place) {
-            resultList.push(new placeCard(place));
-        });
-    */
-
 };
 
 /** ---------- filter functions --------------------- **/
@@ -197,7 +190,7 @@ function prepMap() {
     initMap(); // refresh and reconstruct map
     OpenInfowindowForMarker(0); // open first infoWindow
     forceTop(); // ensure DOM is scrolled to top
-};
+}
 
 function flipCards() {
     resultList(resultList().reverse());
@@ -206,14 +199,14 @@ function flipCards() {
 
 function sortABC() {
     resultList(resultList().sort(function(left, right) {
-        return left.name() == right.name() ? 0 : (left.name() < right.name() ? -1 : 1)
+        return left.name() == right.name() ? 0 : (left.name() < right.name() ? -1 : 1);
     }));
     prepMap();
 }
 
 function sortStars() {
     resultList(resultList().sort(function(left, right) {
-        return left.stars.count() == right.stars.count() ? 0 : (left.stars.count() < right.stars.count() ? -1 : 1)
+        return left.stars.count() == right.stars.count() ? 0 : (left.stars.count() < right.stars.count() ? -1 : 1);
     }));
     resultList(resultList().reverse());
     prepMap();
@@ -356,7 +349,7 @@ function makeErrorList() {
 
     /*  ---  Display the error message + Beacon  ---  */
     response.forEach(function(place) {
-      resultList.push(new placeCard(place));
+      resultList.push(new placeCard(place));});
 
     /*  ---  clean up the view  ---  */
     initMap(); // refresh and reconstruct map
