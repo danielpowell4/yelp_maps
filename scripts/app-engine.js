@@ -465,7 +465,7 @@ function setMarkers(map, points) {
                 lng: (this.lng - mapShift.right)
             }); // center map to marker with shift for search
             $('html, body').animate({
-                scrollTop: $(this.idSelector).offset().top - 20
+                scrollTop: $(this.idSelector).offset().top - ( 20 + scrollAdjustment)
             }, 100); // scroll to active placeCard in the DOM
             this.setIcon(markerIcon.active); // change icon to active
             this.setZIndex(5); // bring marker to top layer
@@ -540,7 +540,7 @@ function reformatOnSize(){
         right: 0,
         up: 0
     };
-    scrollAdjustment = 260;
+    scrollAdjustment = 240;
     map.setZoom(11);
   }
 };
