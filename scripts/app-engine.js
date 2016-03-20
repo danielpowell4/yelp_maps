@@ -80,7 +80,9 @@ var placeCard = function(data) {
     this.imgSrc = ko.computed(function() {
         return data.image_url.replace('ms.jpg', 'l.jpg');
     });
-    this.imgAltTag = ko.computed(function(){return 'Photo of ' + data.name});
+    this.imgAltTag = ko.computed(function() {
+        return 'Photo of ' + data.name
+    });
     this.address1 = ko.observable(data.location.display_address[0]);
     this.city = ko.observable(data.location.city);
     this.state = ko.observable(data.location.state_code);
@@ -149,8 +151,8 @@ function updateYelpResults() {
 }
 
 /**  Hide search results
-  *
-  */
+ *
+ */
 
 function hideYelpResults() {
     $('.yelp-search-results').toggleClass('hidden');
@@ -166,45 +168,43 @@ var searchFor = ko.observable("Pizza"); // form Yelp Search Form with prepopulat
 var searchNear = ko.observable("80210"); // form Yelp Search Form with prepopulated placeholder
 
 var ViewModel = function() {
-  var self = this;
+    var self = this;
 
-/* -- Beacon data --
-      response.forEach(function(place) {
-        resultList.push(new placeCard(place));
-    });
-*/
+    /* -- Beacon data --
+          response.forEach(function(place) {
+            resultList.push(new placeCard(place));
+        });
+    */
 
 };
 
 /** ---------- filter functions --------------------- **/
 
-function prepMap(){
-  clearAllMarkers(); // empty current markers
-  initMap(); // refresh and reconstruct map
-  OpenInfowindowForMarker(0); // open first infoWindow
-  forceTop(); // ensure DOM is scrolled to top
+function prepMap() {
+    clearAllMarkers(); // empty current markers
+    initMap(); // refresh and reconstruct map
+    OpenInfowindowForMarker(0); // open first infoWindow
+    forceTop(); // ensure DOM is scrolled to top
 };
 
-function flipCards(){
-  resultList(resultList().reverse());
-  prepMap();
+function flipCards() {
+    resultList(resultList().reverse());
+    prepMap();
 }
 
-function sortABC(){
-  resultList(  resultList().sort(function (left, right) {
-       return left.name() == right.name() ? 0 : (left.name() < right.name() ? -1 : 1)
-     })
-   );
-  prepMap();
+function sortABC() {
+    resultList(resultList().sort(function(left, right) {
+        return left.name() == right.name() ? 0 : (left.name() < right.name() ? -1 : 1)
+    }));
+    prepMap();
 }
 
-function sortStars(){
-  resultList(  resultList().sort(function (left, right) {
-       return left.stars.count() == right.stars.count() ? 0 : (left.stars.count() < right.stars.count() ? -1 : 1)
-     })
-   );
-  resultList(resultList().reverse());
-  prepMap();
+function sortStars() {
+    resultList(resultList().sort(function(left, right) {
+        return left.stars.count() == right.stars.count() ? 0 : (left.stars.count() < right.stars.count() ? -1 : 1)
+    }));
+    resultList(resultList().reverse());
+    prepMap();
 }
 
 
@@ -337,18 +337,18 @@ function makeYelpList(d) {
     forceTop(); // ensure DOM is scrolled to top
 }
 
-function makeErrorList(){
-  /*  ---  Clean up the old lists ---  */
-  resultList.removeAll(); // empty the resultList
-  clearAllMarkers(); // clears marker array
+function makeErrorList() {
+    /*  ---  Clean up the old lists ---  */
+    resultList.removeAll(); // empty the resultList
+    clearAllMarkers(); // clears marker array
 
-  /*  ---  Display the error message  ---  */
-  resultList.push(new placeCard(errorMessage)); // place cards into observables
+    /*  ---  Display the error message  ---  */
+    resultList.push(new placeCard(errorMessage)); // place cards into observables
 
-  /*  ---  clean up the view  ---  */
-  initMap(); // refresh and reconstruct map
-  OpenInfowindowForMarker(0); // open first infoWindow
-  forceTop(); // ensure DOM is scrolled to top
+    /*  ---  clean up the view  ---  */
+    initMap(); // refresh and reconstruct map
+    OpenInfowindowForMarker(0); // open first infoWindow
+    forceTop(); // ensure DOM is scrolled to top
 }
 
 /*
@@ -450,7 +450,8 @@ function setMarkers(map, points) {
 
     /*  ---  function needed for cleaning up infowindows ---  */
     function hideInfoWindowCloseControl() {
-      //  $(".gm-style-iw").next("div").css('display', 'none'); // this function gets rid of close btn in infowindows
+        //  $(".gm-style-iw").next("div").css('display', 'none'); // this function gets rid of close btn in infowindows
+        // udacity doesn't like it for this project so having an x is fine
     }
 
     /*  ---  function gives all markers resting icon and a base layering ---  */
@@ -504,7 +505,7 @@ function setMarkers(map, points) {
                 lng: (this.lng - mapShift.right)
             }); // center map to marker with shift for search
             $('html, body').animate({
-                scrollTop: $(this.idSelector).offset().top - ( 20 + scrollAdjustment)
+                scrollTop: $(this.idSelector).offset().top - (20 + scrollAdjustment)
             }, 100); // scroll to active placeCard in the DOM
             this.setIcon(markerIcon.active); // change icon to active
             this.setZIndex(5); // bring marker to top layer
@@ -548,8 +549,8 @@ function OpenInfowindowForMarker(index) {
     google.maps.event.trigger(currentMarkers[index], 'dblclick');
 }
 
-function openMarker(index){
-  OpenInfowindowForMarker(index);
+function openMarker(index) {
+    OpenInfowindowForMarker(index);
 }
 
 /*  ---  compare window scroll count to offsets of each placeCard and    ---
@@ -570,32 +571,32 @@ function scrollingTriggersMarkers() {
 }
 
 /** ----------------------------------------------------------------------------
-  *    Handles changing mapShift vars in responsive manner using matchMedia
-  * ----------------------------------------------------------------------------
-  */
+ *    Handles changing mapShift vars in responsive manner using matchMedia
+ * ----------------------------------------------------------------------------
+ */
 
-function reformatOnSize(){
-  if (window.matchMedia("(min-width: 680px)").matches) {
-    mapShift = {
-        right: 0.08,
-        up: 0.04
-    };
-    scrollAdjustment = 0;
-    map.setZoom(12);
-    $('#map').removeClass("fixed");
-  } else {
-    mapShift = {
-        right: -0.01,
-        up: 0.01
-    };
-    scrollAdjustment = 260;
-    map.setZoom(11);
-  }
-};
+function reformatOnSize() {
+    if (window.matchMedia("(min-width: 680px)").matches) {
+        mapShift = {
+            right: 0.08,
+            up: 0.04
+        };
+        scrollAdjustment = 0;
+        map.setZoom(12);
+        $('#map').removeClass("fixed");
+    } else {
+        mapShift = {
+            right: -0.01,
+            up: 0.01
+        };
+        scrollAdjustment = 260;
+        map.setZoom(11);
+    }
+}
 
 
-$( window ).resize(function() {
-  reformatOnSize();
+$(window).resize(function() {
+    reformatOnSize();
 });
 
 /*  ---  force scroll the DOM to the top --- */
