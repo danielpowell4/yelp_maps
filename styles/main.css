@@ -294,7 +294,7 @@ svg.search-item-social-buttons-icon:hover{
 @media screen and (max-width: 660px){
 
   nav{
-    overflow: auto;
+    overflow: visible;
     height: 30px;
     position: fixed;
   }
