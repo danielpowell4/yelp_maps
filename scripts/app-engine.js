@@ -307,8 +307,8 @@ function makeYelpList(d) {
         resultList.push(new placeCard(place));
     });
     scrollingTriggersMarkers(); // activate scroll position monitor triggers
-    forceTop(); // ensure DOM is scrolled to top
     initMap(); // refresh and reconstruct map
+    forceTop(); // ensure DOM is scrolled to top
 }
 
 function makeErrorList(){
@@ -320,8 +320,8 @@ function makeErrorList(){
   resultList.push(new placeCard(errorMessage)); // place cards into observables
 
   /*  ---  clean up the view  ---  */
-  forceTop(); // ensure DOM is scrolled to top
   initMap(); // refresh and reconstruct map
+  forceTop(); // ensure DOM is scrolled to top
 }
 
 /*
