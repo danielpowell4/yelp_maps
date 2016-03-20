@@ -100,7 +100,7 @@ h1 {
     position: fixed;
     background-color: #fff;
     right: 0;
-    overflow: visible;
+    z-index: 999;
 }
 
 .dropdown:hover .dropdown-content, .dropdown:active .dropdown-content, .dropdown:focus .dropdown-content {
