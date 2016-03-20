@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <title>Yelp on Maps</title>
     <meta name="description" content="See Yelp results in a smarter, simpler format: right on a Google Maps map. Pull search results in real time and see where you are going.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" media="screen" href="styles/main.css">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-  </head>
+</head>
 
-  <body>
+<body>
 
 
-      <!-- Nav Bar with Logo and social links -->
-      <nav>
+    <!-- Nav Bar with Logo and social links -->
+    <nav>
         <div id="logo">
-          <h1>D</h1>
+            <h1>D</h1>
         </div>
         <div class="dropdown">
-          <span>Fitler</span>
-          <ul class="filter-btn dropdown-content">
-            <li data-bind="click: flipCards">Sort Rating</li>
-            <li data-bind="click: sortABC">Sort ABC</li>
-            <li data-bind="click: flipCards">Flip List</li>
-          </ul>
+            <span>Fitler</span>
+            <ul class="filter-btn dropdown-content">
+                <li data-bind="click: flipCards">Sort Rating</li>
+                <li data-bind="click: sortABC">Sort ABC</li>
+                <li data-bind="click: flipCards">Flip List</li>
+            </ul>
         </div>
-      </nav>
+    </nav>
 
     <div class="map-wrapper">
-      <div id="map"></div>
+        <div id="map"></div>
     </div>
 
-      <!-- Scrolling search + list view scroll box -->
+    <!-- Scrolling search + list view scroll box -->
 
-      <div id="results-container">
+    <div id="results-container">
 
         <Form class="yelp-form-box" data-bind="submit: updateYelpResults">
-            <p class="search-item">Show me:  <input data-bind="value: searchFor" type="text" /></p>
-            <p class="search-item">in:  <input data-bind="value: searchNear" type="text" /></p>
+            <p class="search-item">Show me:
+                <input data-bind="value: searchFor" type="text" />
+            </p>
+            <p class="search-item">in:
+                <input data-bind="value: searchNear" type="text" />
+            </p>
             <button class="yelp-btn search-item" data-bind="click: updateYelpResults">Yelp!</button>
         </form>
 
@@ -46,28 +51,29 @@
 
             <div class="result-card" data-bind="attr: {'id': id}, click: function(){ OpenInfowindowForMarker($index())}">
 
-              <div class="place-title">
-                <h1 class="search-item-counter" data-bind="text: ($index() + 1)"></h1>
-                <h3 class="search-item-title" data-bind="text: name" ></h3>
-              </div>
+                <div class="place-title">
+                    <h1 class="search-item-counter" data-bind="text: ($index() + 1)"></h1>
+                    <h3 class="search-item-title" data-bind="text: name"></h3>
+                </div>
 
                 <p data-bind="text: description" class="search-item-snippet"></p>
 
                 <div class="search-image-container">
-                  <img class="search-image" data-bind="attr: {src: imgSrc, alt: imgAltTag}">
+                    <img class="search-image" data-bind="attr: {src: imgSrc, alt: imgAltTag}">
                 </div>
 
                 <div class="search-item-contact-box">
 
-                  <div class="search-item-address">
-                    <div data-bind="text: address1" class="address-line-1"></div>
-                    <div data-bind="text: address2" class="address-line-2"></div>
-                  </div>
+                    <div class="search-item-address">
+                        <div data-bind="text: address1" class="address-line-1"></div>
+                        <div data-bind="text: address2" class="address-line-2"></div>
+                    </div>
 
-                  <div class="search-item-contact">
-                    <div class="contact-line-1"><a href="/#" data-bind="attr: {href: webURL}" target="_blank">View Yelp Profile</a></div>
-                    <div data-bind="text: phone" class="contact-line-2"></div>
-                  </div>
+                    <div class="search-item-contact">
+                        <div class="contact-line-1"><a href="/#" data-bind="attr: {href: webURL}" target="_blank">View Yelp Profile</a>
+                        </div>
+                        <div data-bind="text: phone" class="contact-line-2"></div>
+                    </div>
 
                 </div>
 
@@ -76,29 +82,38 @@
                 <a class="search-item-directions" data-bind="attr:{href: googleDirections}" target="_blank">GET DIRECTIONS</a>
 
                 <div class="search-item-social">
-                  <h4>SHARE THIS SPOT!</h4>
-                  <ul>
-                    <li><a target="_blank" class="search-item-social-buttons-popup" data-bind="attr:{href: facebookShare}">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.406 43.754" class="search-item-social-buttons-icon" data-svg-fallback="/v/racked/scripts/../../chorus/images/social/facebook.png" data-svg-fallback-override="" width="16" height="16"><path d="M5.43 43.754v-20.53H0V15.83h5.43V9.518C5.43 4.557 8.635 0 16.024 0c2.99 0 5.204.286 5.204.286l-.175 6.903s-2.257-.023-4.72-.023c-2.663 0-3.09 1.228-3.09 3.266v5.398h8.022l-.35 7.393h-7.672v20.53H5.43z"></path></svg>
-                      </a>
-                    </li>
-                    <li><a target="_blank" class="search-item-social-buttons-popup" data-bind="attr:{href: twitterShare}">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44.71 36.327" class="search-item-social-buttons-icon" data-svg-fallback="/v/racked/scripts/../../chorus/images/social/twitter.png" data-svg-fallback-override="" width="16" height="16"><path d="M44.71 4.295c-1.656.724-3.415 1.242-5.278 1.45 1.914-1.14 3.363-2.95 4.036-5.072-1.76 1.035-3.726 1.81-5.796 2.225C35.965 1.138 33.584 0 30.945 0c-5.07 0-9.16 4.088-9.16 9.16 0 .724.052 1.448.208 2.12-7.607-.413-14.335-3.88-18.888-9.417-.777 1.345-1.242 2.742-1.242 4.45 0 3.157 1.604 5.95 4.088 7.607-1.5-.052-2.897-.466-4.14-1.138v.103c0 4.45 3.158 8.176 7.35 9.004-.777.206-1.605.31-2.433.31-.57 0-1.138-.052-1.708-.155 1.138 3.622 4.553 6.313 8.538 6.365-3.105 2.483-7.09 4.346-11.385 4.346-.724 0-1.45-.05-2.173-.155 4.036 2.59 8.9 3.727 14.075 3.727 16.87 0 26.08-13.972 26.08-26.08v-1.19c1.76-1.295 3.313-2.9 4.555-4.762"></path></svg>
-                      </a>
-                    </li>
-                  </ul>
+                    <h4>SHARE THIS SPOT!</h4>
+                    <ul>
+                        <li>
+                            <a target="_blank" class="search-item-social-buttons-popup" data-bind="attr:{href: facebookShare}">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.406 43.754" class="search-item-social-buttons-icon" data-svg-fallback="/v/racked/scripts/../../chorus/images/social/facebook.png" data-svg-fallback-override="" width="16" height="16">
+                                    <path d="M5.43 43.754v-20.53H0V15.83h5.43V9.518C5.43 4.557 8.635 0 16.024 0c2.99 0 5.204.286 5.204.286l-.175 6.903s-2.257-.023-4.72-.023c-2.663 0-3.09 1.228-3.09 3.266v5.398h8.022l-.35 7.393h-7.672v20.53H5.43z"></path>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" class="search-item-social-buttons-popup" data-bind="attr:{href: twitterShare}">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44.71 36.327" class="search-item-social-buttons-icon" data-svg-fallback="/v/racked/scripts/../../chorus/images/social/twitter.png" data-svg-fallback-override="" width="16" height="16">
+                                    <path d="M44.71 4.295c-1.656.724-3.415 1.242-5.278 1.45 1.914-1.14 3.363-2.95 4.036-5.072-1.76 1.035-3.726 1.81-5.796 2.225C35.965 1.138 33.584 0 30.945 0c-5.07 0-9.16 4.088-9.16 9.16 0 .724.052 1.448.208 2.12-7.607-.413-14.335-3.88-18.888-9.417-.777 1.345-1.242 2.742-1.242 4.45 0 3.157 1.604 5.95 4.088 7.607-1.5-.052-2.897-.466-4.14-1.138v.103c0 4.45 3.158 8.176 7.35 9.004-.777.206-1.605.31-2.433.31-.57 0-1.138-.052-1.708-.155 1.138 3.622 4.553 6.313 8.538 6.365-3.105 2.483-7.09 4.346-11.385 4.346-.724 0-1.45-.05-2.173-.155 4.036 2.59 8.9 3.727 14.075 3.727 16.87 0 26.08-13.972 26.08-26.08v-1.19c1.76-1.295 3.313-2.9 4.555-4.762"></path>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-          </div> <!-- card results -->
-        </div> <!-- yelp search results -->
-      </div> <!-- results-container -->
+            </div>
+            <!-- card results -->
+        </div>
+        <!-- yelp search results -->
+    </div>
+    <!-- results-container -->
 
-      <div class="">
+    <div class="">
 
-      </div>
+    </div>
 
 
-  </body>
+</body>
 
 <!-- jQuery to the rescue -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
