@@ -2,6 +2,7 @@ body {
   margin: 0;
   color: #292929;
   font-family: 'Montserrat', sans-serif;
+  overflow: visible;
 }
 
 p {
@@ -19,19 +20,22 @@ nav {
       padding-bottom: 0;
       z-index: 6;
       border-bottom: 1px solid #d9d9d9;
-      position: static;
+      position: absolute;
       margin-left: 0;
 }
 
 .map-wrapper {
-  position: fixed!important;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   right: 0;
-  padding: 61px 0 30px 0;
   z-index: 1;
+}
+.map-wrapper #map {
+  height: 100%;
+  overflow: visible!important;
 }
 
 #logo {
@@ -42,6 +46,10 @@ nav {
   max-width: 170px;
   color: white;
   display: inline-block;
+}
+
+#logo h1{
+  padding: 10px;
 }
 
 h1 {
@@ -107,7 +115,7 @@ input {
     max-width: 485px;
     min-width: 225px;
     position: relative;
-    top: 7vh;
+    top: 78px;
     left: 2.5vw;
     overflow-y: auto;
     z-index: 5;
@@ -259,16 +267,27 @@ svg.search-item-social-buttons-icon:hover{
   margin: 2px auto -8px;
 }
 
-.fixed {
-	position: fixed!important;
-	top: 0;
-	width: 100%;
-}
 /* Changes for smaller screens */
 
 @media screen and (max-width: 660px){
+
+  nav{
+    overflow: auto;
+    height: 30px;
+    position: fixed;
+  }
+  #logo h1{
+    padding: 2px;
+    font-size: 20px;
+  }
+  .hide-btn{
+    height: 30px;
+    margin: 0 10px;
+    top: 0;
+  }
   .infowindow-title {
-    max-width: 84px;
+    max-width: 111px;
+    font-size: 14px;
   }
   .search-item-contact-box {
     display: none;
@@ -280,17 +299,17 @@ svg.search-item-social-buttons-icon:hover{
     background-color: #edefed;
   }
   .map-wrapper{
-    position: static!important;
-    display: block;
+    position: fixed;
     width: 100%;
-    height: 140px;
-    border-bottom: 1px solid #fff!important;
-    box-shadow: 1px 1px 5px #888888;
-    z-index: 9;
-    position: static;
+    height: 260px;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    padding: 30px 0 0 0;
   }
   .fixed{
-    position: fixed!important;
+    position: fixed;
     top: 0;
     width: 100%;
   }
@@ -298,11 +317,15 @@ svg.search-item-social-buttons-icon:hover{
     position: absolute;
     width: calc(100% - 20px);
     max-width: 100%;
+    height: auto;
     padding: 0 10px;
     top: 312px;
-    overflow-y: visible;
+    overflow: visible;
     margin: 0 auto;
     left: 0;
-    z-index: 5;
+    z-index: 3;
+  }
+  .yelp-search-results{
+    overflow: visible;
   }
 }

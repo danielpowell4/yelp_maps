@@ -13,12 +13,15 @@
 
       <!-- Nav Bar with Logo and social links -->
       <nav>
-        <div id="logo"><h1 style="padding:10px;">LOGO</h1>
+        <div id="logo"><h1>LOGO</h1>
         </div>
         <button class="hide-btn" data-bind="click: hideYelpResults">Hide List</button>
+        <button class="hide-btn" data-bind="click: flipCards">Flip List</button>
       </nav>
 
-    <div class="map-wrapper" id="map"></div>
+    <div class="map-wrapper">
+      <div id="map"></div>
+    </div>
 
       <!-- Scrolling search + list view scroll box -->
 
@@ -36,7 +39,7 @@
 
             <div class="result-card" data-bind="attr: {'id': id}">
 
-              <div class="place-title tk-co-headline">
+              <div class="place-title">
                 <h1 class="search-item-counter" data-bind="text: ($index() + 1)"></h1>
                 <h3 class="search-item-title" data-bind="text: name" ></h3>
               </div>

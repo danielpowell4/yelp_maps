@@ -162,16 +162,26 @@ function hideYelpResults() {
  *   -------------------------------------------------------------------------
  */
 
-var searchFor = ko.observable("Tacos"); // form Yelp Search Form with prepopulated placeholder
+var searchFor = ko.observable("Pizza"); // form Yelp Search Form with prepopulated placeholder
 var searchNear = ko.observable("80210"); // form Yelp Search Form with prepopulated placeholder
 
 var ViewModel = function() {
+  var self = this;
 
-    response.forEach(function(place) {
+/* -- Beacon data --
+      response.forEach(function(place) {
         resultList.push(new placeCard(place));
     });
+*/
 
 };
+
+function flipCards(){
+  resultList(resultList().reverse());
+  clearAllMarkers();
+  initMap(); // refresh and reconstruct map
+  forceTop(); // ensure DOM is scrolled to top
+}
 
 ko.applyBindings(new ViewModel());
 
@@ -268,11 +278,11 @@ function yJax(url, yData) {
         'jsonpCallback': 'cb',
         'success': function(data) {
             makeYelpList(data);
-            console.log("data just came in");
+
         },
         'error': function() {
             makeErrorList();
-            console.log("oh no! it didn't work!!");
+            alert("oh no! the yelp request failed. Please try again later.");
         },
     });
 }
@@ -543,20 +553,9 @@ function reformatOnSize(){
     };
     scrollAdjustment = 240;
     map.setZoom(11);
-    createSticky(jQuery(".map-wrapper"));
   }
 };
 
-
-function createSticky(sticky) {
-	if (typeof sticky !== "undefined") {
-		var	pos = sticky.offset().top,
-				win = jQuery(window);
-		win.on("scroll", function() {
-    		win.scrollTop() >= pos ? sticky.addClass("fixed") : sticky.removeClass("fixed");
-		});
-	}
-}
 
 $( window ).resize(function() {
   reformatOnSize();
@@ -565,6 +564,6 @@ $( window ).resize(function() {
 /*  ---  force scroll the DOM to the top --- */
 function forceTop() {
     $('html, body').animate({
-        scrollTop: $('body').offset().top - 200,
+        scrollTop: $('body').offset().top,
     }, 200);
 }
