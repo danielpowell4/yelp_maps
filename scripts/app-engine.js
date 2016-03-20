@@ -1,9 +1,27 @@
 /*
  *   -------------------------------------------------------------------------
- *     This is the starting 'response' JSON that sits until yelp data comes
+ *          This is the data for an errorMessage
  *   -------------------------------------------------------------------------
  */
 var response = [{
+
+      'id': '12309120',
+      'name': "OH NO!!",
+      'snippet_text': "You're yelp request didn't go through. Please try again later, or just hang out with the crew.",
+      'image_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
+      'address1': '2950 Camozzi Rd',
+      'cityState': 'Revelstoke, BC',
+      'display_phone': '250 814 0087',
+      'url': 'www.revelstokemountainresort.com/',
+      'location': {
+          'coordinate': {
+              'latitude': 50.962,
+              'longitude': -118.216,
+          },
+          'display_address': ['2955 Ski Town Canada'],
+
+      }
+},{
     'id': '12309120',
     'name': "Beacon's House",
     'snippet_text': "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
@@ -133,12 +151,6 @@ var placeCard = function(data) {
 
 /* ---  resultList is the placeCards' holder --- */
 var resultList = ko.observableArray([]);
-
-/* ---  resultList is the placeCards' holder --- */
-var errorMessage = {
-    'name': 'Oh No!',
-    'snippet_text': 'We were unable to find any results. Please check your search and try again.'
-};
 
 /*
  *   -----------------------------------------------------------------
@@ -342,8 +354,9 @@ function makeErrorList() {
     resultList.removeAll(); // empty the resultList
     clearAllMarkers(); // clears marker array
 
-    /*  ---  Display the error message  ---  */
-    resultList.push(new placeCard(errorMessage)); // place cards into observables
+    /*  ---  Display the error message + Beacon  ---  */
+    response.forEach(function(place) {
+      resultList.push(new placeCard(place));
 
     /*  ---  clean up the view  ---  */
     initMap(); // refresh and reconstruct map
@@ -604,4 +617,9 @@ function forceTop() {
     $('html, body').animate({
         scrollTop: $('body').offset().top,
     }, 200);
+}
+
+/*  ---  googleError in case it breaks --- */
+function googleError() {
+  alert("Google Maps did not load");
 }
