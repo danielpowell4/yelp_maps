@@ -24,7 +24,7 @@ nav {
 }
 
 .map-wrapper {
-  position: fixed;
+  position: fixed!important;
   width: 100%;
   height: 100%;
   top: 0;
@@ -280,7 +280,7 @@ svg.search-item-social-buttons-icon:hover{
     background-color: #edefed;
   }
   .map-wrapper{
-    position: static;
+    position: static!important;
     display: block;
     width: 100%;
     height: 140px;
@@ -289,11 +289,16 @@ svg.search-item-social-buttons-icon:hover{
     z-index: 9;
     position: static;
   }
+  .fixed{
+    position: fixed!important;
+    top: 0;
+    width: 100%;
+  }
   #results-container{
     position: absolute;
-    width: 80%;
-    max-width: 485px;
-    min-width: 225px;
+    width: calc(100% - 20px);
+    max-width: 100%;
+    padding: 0 10px;
     top: 312px;
     overflow-y: visible;
     margin: 0 auto;

@@ -470,7 +470,6 @@ function setMarkers(map, points) {
             }, 100); // scroll to active placeCard in the DOM
             this.setIcon(markerIcon.active); // change icon to active
             this.setZIndex(5); // bring marker to top layer
-            console.log(mapShift);
         });
 
         /*  ---  mouseover ---  */
