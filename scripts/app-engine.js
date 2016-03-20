@@ -358,13 +358,16 @@ function initMap() {
             lng: response[0].location.coordinate.longitude - 0.07
         },
         scrollwheel: false,
-        zoom: 12
+        zoom: 12,
+        mapTypeControl: false
     });
     // set markers with placeholding copy
     setMarkers(map, resultList());
     infowindow = new google.maps.InfoWindow({
         content: "loading..."
     });
+
+    reformatOnSize(); // for map
 }
 
 /*  ---  define icons used for markers ---  */
@@ -396,27 +399,7 @@ var mapShift = {
     up: 0.04
 };
 
-function reformatOnSize(){
-  if (window.matchMedia("(min-width: 680px)").matches) {
-    mapShift = {
-        right: 0.08,
-        up: 0.04
-    };
-    map.setZoom(12);
-  } else {
-    mapShift = {
-        right: 0,
-        up: 0
-    };
-    map.setZoom(9);
-  }
-};
 
-reformatOnSize();
-
-$( window ).resize(function() {
-  reformatOnSize();
-});
 
 /*
  *  -----------------------------------------------------------------------------
@@ -529,9 +512,12 @@ function OpenInfowindowForMarker(index) {
 
 /*  ---  compare window scroll count to offsets of each placeCard and    ---
     ---  trigger the appropriate marker as the card passes through view  --- */
+
+var scrollAdjustment = 0; // zero on standard desktop view
+
 function scrollingTriggersMarkers() {
     $(window).scroll(function() { // as user scrolls
-        var pixelsScrolled = $(window).scrollTop(); // store distance scrolled
+        var pixelsScrolled = $(window).scrollTop() + scrollAdjustment; // store distance scrolled
         for (var resultCard in resultList()) { // for each placeCard
             var resultOffset = $(resultList()[resultCard].idSelector()).offset().top; // store the offset of the card
             if (resultOffset - pixelsScrolled < 60 && resultOffset - pixelsScrolled > -60) { // check if two distances are close
@@ -541,6 +527,28 @@ function scrollingTriggersMarkers() {
     });
 }
 
+function reformatOnSize(){
+  if (window.matchMedia("(min-width: 680px)").matches) {
+    mapShift = {
+        right: 0.08,
+        up: 0.04
+    };
+    scrollAdjustment = 0;
+    map.setZoom(12);
+  } else {
+    mapShift = {
+        right: 0,
+        up: 0
+    };
+    scrollAdjustment = 260;
+    map.setZoom(11);
+  }
+};
+
+
+$( window ).resize(function() {
+  reformatOnSize();
+});
 
 /*  ---  force scroll the DOM to the top --- */
 function forceTop() {
