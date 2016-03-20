@@ -24,7 +24,7 @@ nav {
 }
 
 #map {
-  position: fixed!important;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
@@ -259,6 +259,11 @@ svg.search-item-social-buttons-icon:hover{
   margin: 2px auto -8px;
 }
 
+.fixed {
+	position: fixed!important;
+	top: 0;
+	width: 100%;
+}
 /* Changes for smaller screens */
 
 @media screen and (max-width: 660px){
@@ -281,6 +286,7 @@ svg.search-item-social-buttons-icon:hover{
     border-bottom: 1px solid #fff!important;
     box-shadow: 1px 1px 5px #888888;
     z-index: 9;
+    position: static;
   }
   #results-container{
     width: 80%;
