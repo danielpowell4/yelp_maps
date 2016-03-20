@@ -551,7 +551,7 @@ function reformatOnSize(){
         right: 0,
         up: 0
     };
-    scrollAdjustment = 240;
+    scrollAdjustment = 260;
     map.setZoom(11);
   }
 };
