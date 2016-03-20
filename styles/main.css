@@ -19,11 +19,11 @@ nav {
       padding-bottom: 0;
       z-index: 6;
       border-bottom: 1px solid #d9d9d9;
-      position: relative;
+      position: static;
       margin-left: 0;
 }
 
-#map {
+.map-wrapper {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -279,7 +279,8 @@ svg.search-item-social-buttons-icon:hover{
   body{
     background-color: #edefed;
   }
-  #map{
+  .map-wrapper{
+    position: static;
     display: block;
     width: 100%;
     height: 140px;
@@ -289,12 +290,13 @@ svg.search-item-social-buttons-icon:hover{
     position: static;
   }
   #results-container{
+    position: absolute;
     width: 80%;
     max-width: 485px;
     min-width: 225px;
-    top: 192px;
+    top: 312px;
+    overflow-y: visible;
     margin: 0 auto;
-    overflow-y: auto;
     left: 0;
     z-index: 5;
   }

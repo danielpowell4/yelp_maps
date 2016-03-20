@@ -368,6 +368,7 @@ function initMap() {
     });
 
     reformatOnSize(); // for map
+    $('#map').css('position: absolute');
 }
 
 /*  ---  define icons used for markers ---  */
@@ -535,6 +536,7 @@ function reformatOnSize(){
     };
     scrollAdjustment = 0;
     map.setZoom(12);
+    $('#map').removeClass("fixed");
   } else {
     mapShift = {
         right: 0,
