@@ -548,6 +548,10 @@ function OpenInfowindowForMarker(index) {
     google.maps.event.trigger(currentMarkers[index], 'dblclick');
 }
 
+function openMarker(index){
+  OpenInfowindowForMarker(index);
+}
+
 /*  ---  compare window scroll count to offsets of each placeCard and    ---
     ---  trigger the appropriate marker as the card passes through view  --- */
 
