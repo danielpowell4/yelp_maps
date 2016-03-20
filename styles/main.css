@@ -34,8 +34,6 @@ nav {
   z-index: 1;
 }
 
-
-
 #logo {
   margin: 0 0 0 15px;
   background-color: #EE8060;
@@ -118,7 +116,9 @@ input {
 .result-card{
   background: #fff;
   padding: 20px;
-  margin-bottom: 20px
+  margin: 0 5px 20px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, .4);
+  border-radius: 4px;
 }
 
 .search-item-title{
@@ -266,13 +266,31 @@ svg.search-item-social-buttons-icon:hover{
   .infowindow-title {
     max-width: 84px;
   }
-  #results-container{
-    left: 1px;
-  }
   .search-item-contact-box {
     display: none;
   }
   .search-image-container {
     margin: 0 -20px 10px;
-}
+  }
+  body{
+    background-color: #edefed;
+  }
+  #map{
+    display: block;
+    width: 100%;
+    height: 180px;
+    border-bottom: 1px solid #fff!important;
+    box-shadow: 1px 1px 5px #888888;
+    z-index: 9;
+  }
+  #results-container{
+    width: 80%;
+    max-width: 485px;
+    min-width: 225px;
+    top: 280px;
+    margin: 0 auto;
+    overflow-y: auto;
+    left: 0;
+    z-index: 5;
+  }
 }

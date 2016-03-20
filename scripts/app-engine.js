@@ -71,7 +71,6 @@ var response = [{
 var placeCard = function(data) {
 
     var that = this;
-
     this.name = ko.observable(data.name);
     this.id = ko.observable(data.id);
     this.idSelector = ko.computed(function() {
@@ -148,6 +147,10 @@ var errorMessage = {
 function updateYelpResults() {
     yelpAjax(searchFor(), searchNear()); // get all the needed info
 }
+
+/**  Hide search results
+  *
+  */
 
 function hideYelpResults() {
     $('.yelp-search-results').toggleClass('hidden');
@@ -344,11 +347,12 @@ function clearAllMarkers() {
  *     build the map and place markers, listeners and triggers
  *  ---------------------------------------------------------------
  */
+var map;
 
 function initMap() {
 
     // Create a map object and specify the DOM element for display.
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         center: {
             lat: response[0].location.coordinate.latitude - 0.04,
             lng: response[0].location.coordinate.longitude - 0.07
@@ -391,6 +395,28 @@ var mapShift = {
     right: 0.08,
     up: 0.04
 };
+
+function reformatOnSize(){
+  if (window.matchMedia("(min-width: 680px)").matches) {
+    mapShift = {
+        right: 0.08,
+        up: 0.04
+    };
+    map.setZoom(12);
+  } else {
+    mapShift = {
+        right: 0,
+        up: 0
+    };
+    map.setZoom(9);
+  }
+};
+
+reformatOnSize();
+
+$( window ).resize(function() {
+  reformatOnSize();
+});
 
 /*
  *  -----------------------------------------------------------------------------
@@ -449,8 +475,8 @@ function setMarkers(map, points) {
             resetMarkerIcons(); // put other markers back to resting state
             infowindow.setContent(this.windowContent); // set infowindow Content
             infowindow.open(map, this); // open the infowindow
-            hideInfoWindowCloseControl(); // hide infoWindow close control
             this.setAnimation(google.maps.Animation.BOUNCE); // bounce on click
+            hideInfoWindowCloseControl(); // hide infoWindow close control
             map.panTo({
                 lat: (this.lat - mapShift.up),
                 lng: (this.lng - mapShift.right)
@@ -460,6 +486,7 @@ function setMarkers(map, points) {
             }, 100); // scroll to active placeCard in the DOM
             this.setIcon(markerIcon.active); // change icon to active
             this.setZIndex(5); // bring marker to top layer
+            console.log(mapShift);
         });
 
         /*  ---  mouseover ---  */
@@ -513,6 +540,7 @@ function scrollingTriggersMarkers() {
         }
     });
 }
+
 
 /*  ---  force scroll the DOM to the top --- */
 function forceTop() {
