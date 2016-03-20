@@ -176,12 +176,36 @@ var ViewModel = function() {
 
 };
 
-function flipCards(){
-  resultList(resultList().reverse());
-  clearAllMarkers();
+/** ---------- filter functions --------------------- **/
+
+function prepMap(){
+  clearAllMarkers(); // empty current markers
   initMap(); // refresh and reconstruct map
   forceTop(); // ensure DOM is scrolled to top
+};
+
+function flipCards(){
+  resultList(resultList().reverse());
+  prepMap();
 }
+
+function sortABC(){
+  resultList(  resultList().sort(function (left, right) {
+       return left.name() == right.name() ? 0 : (left.name() < right.name() ? -1 : 1)
+     })
+   );
+  prepMap();
+}
+
+function sortStars(){
+  resultList(  resultList().sort(function (left, right) {
+       return left.stars.count() == right.stars.count() ? 0 : (left.stars.count() < right.stars.count() ? -1 : 1)
+     })
+   );
+  resultList(resultList().reverse());
+  prepMap();
+}
+
 
 ko.applyBindings(new ViewModel());
 
@@ -379,6 +403,7 @@ function initMap() {
 
     reformatOnSize(); // for map
     $('#map').css('position: absolute');
+    forceTop();
 }
 
 /*  ---  define icons used for markers ---  */
@@ -548,8 +573,8 @@ function reformatOnSize(){
     $('#map').removeClass("fixed");
   } else {
     mapShift = {
-        right: 0,
-        up: 0
+        right: -0.01,
+        up: 0.01
     };
     scrollAdjustment = 260;
     map.setZoom(11);

@@ -13,10 +13,17 @@
 
       <!-- Nav Bar with Logo and social links -->
       <nav>
-        <div id="logo"><h1>LOGO</h1>
+        <div id="logo">
+          <h1>D</h1>
         </div>
-        <button class="filter-btn hide-btn" data-bind="click: hideYelpResults">Hide List</button>
-        <button class="filter-btn flip-btn" data-bind="click: flipCards">Flip List</button>
+        <div class="dropdown">
+          <span>Fitler</span>
+          <ul class="filter-btn dropdown-content">
+            <li data-bind="click: flipCards">Sort Rating</li>
+            <li data-bind="click: sortABC">Sort ABC</li>
+            <li data-bind="click: flipCards">Flip List</li>
+          </ul>
+        </div>
       </nav>
 
     <div class="map-wrapper">
