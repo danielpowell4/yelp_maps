@@ -181,6 +181,7 @@ var ViewModel = function() {
 function prepMap(){
   clearAllMarkers(); // empty current markers
   initMap(); // refresh and reconstruct map
+  OpenInfowindowForMarker(0); // open first infoWindow
   forceTop(); // ensure DOM is scrolled to top
 };
 
@@ -332,6 +333,7 @@ function makeYelpList(d) {
     });
     scrollingTriggersMarkers(); // activate scroll position monitor triggers
     initMap(); // refresh and reconstruct map
+    OpenInfowindowForMarker(0); // open first infoWindow
     forceTop(); // ensure DOM is scrolled to top
 }
 
@@ -345,6 +347,7 @@ function makeErrorList(){
 
   /*  ---  clean up the view  ---  */
   initMap(); // refresh and reconstruct map
+  OpenInfowindowForMarker(0); // open first infoWindow
   forceTop(); // ensure DOM is scrolled to top
 }
 
