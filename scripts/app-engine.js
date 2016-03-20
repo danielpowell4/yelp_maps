@@ -569,6 +569,11 @@ function scrollingTriggersMarkers() {
     });
 }
 
+/** ----------------------------------------------------------------------------
+  *    Handles changing mapShift vars in responsive manner using matchMedia
+  * ----------------------------------------------------------------------------
+  */
+
 function reformatOnSize(){
   if (window.matchMedia("(min-width: 680px)").matches) {
     mapShift = {
