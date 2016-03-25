@@ -229,7 +229,7 @@ $('.filterField').change(function(){
   nameList = [];
   filteredList = [];
 
-  filterField(filterField().toLowerCase())
+  filterField(filterField().toLowerCase());
 
   for (card in resultList()){
     nameList.push(
@@ -239,7 +239,7 @@ $('.filterField').change(function(){
   };
 
   for (name in nameList){
-    if (nameList[name].name === filterField()) {
+    if (nameList[name].name.includes(filterField())) {
         filteredList.push(resultList()[nameList[name].index])
     };
   };
@@ -298,7 +298,7 @@ function sortStars() {
 
 function resetList() {
   resultList(originalList());
-  console.log('reset');
+  prepMap();
 }
 
 ko.applyBindings(new ViewModel());
