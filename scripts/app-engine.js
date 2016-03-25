@@ -240,12 +240,13 @@ $('.filterField').change(function() {
     for (var card in resultList()) {
         nameList.push({
             'index': card, // store index
-            'name': resultList()[card].name().toLowerCase() // grab name as string
+            'name': resultList()[card].name().toLowerCase(), // grab name as string
+            'description': resultList()[card].description().toLowerCase() // grabs description as string
         });
     }
 
     for (var name in nameList) {
-        if (nameList[name].name.includes(filterField())) { // if a name has the search variable
+        if (nameList[name].name.includes(filterField()) || nameList[name].description.includes(filterField())) { // if a name or description contains the search variable...
             filteredList.push(resultList()[nameList[name].index]); // put it in filtered List
         }
     }
