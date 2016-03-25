@@ -683,7 +683,7 @@ function scrollingTriggersMarkers() {
  */
 
 function reformatOnSize() {
-    if (window.matchMedia("(min-width: 680px)").matches) {
+    if (window.matchMedia("(min-width: 680px)").matches) { // for "big" screen
         mapShift = {
             right: 0.08,
             up: 0.04
@@ -691,13 +691,22 @@ function reformatOnSize() {
         scrollAdjustment = 0;
         map.setZoom(12);
         $('#map').removeClass("fixed");
-    } else {
+    } else if (window.matchMedia("(orientation: portrait)").matches) { // small screen portrait
         mapShift = {
             right: -0.01,
             up: 0.01
         };
         scrollAdjustment = 260;
         map.setZoom(11);
+    }
+    else { // small screen landscape
+      mapShift = {
+          right: 0.09,
+          up: 0
+      };
+      scrollAdjustment = 0;
+      map.setZoom(11);
+      $('#map').removeClass("fixed");
     }
 }
 
