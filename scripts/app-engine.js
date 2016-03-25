@@ -226,28 +226,31 @@ var searchNear = ko.observable("80210"); // form Yelp Search Form with prepopula
 var filterField = ko.observable();
 
 $('.filterField').change(function(){
-  nameList = [];
-  filteredList = [];
+  // ensure emtpy lists
+  nameList = []; // for names
+  filteredList = []; // for matches
 
-  filterField(filterField().toLowerCase());
+  filterField(filterField().toLowerCase()); //  force the case on the search
 
   for (card in resultList()){
     nameList.push(
-      { 'index' : card ,
-        'name' : resultList()[card].name().toLowerCase()
+      { 'index' : card , // store index
+        'name' : resultList()[card].name().toLowerCase() // grab name as string
       });
   };
 
   for (name in nameList){
-    if (nameList[name].name.includes(filterField())) {
-        filteredList.push(resultList()[nameList[name].index])
+    if (nameList[name].name.includes(filterField())) { // if a name has the search variable
+        filteredList.push(resultList()[nameList[name].index]) // put it in filtered List
     };
   };
 
-  if (filteredList.length >= 1){
-    resultList(filteredList);
+  if (filteredList.length >= 1){ // if something in filtered List
+    resultList(filteredList); // put that on the board + map
     prepMap();
-  } else {
+  } else { // otherwise
+    /* ------  Throw error message ------ */
+
     /*  ---  Clean up the old lists ---  */
     resultList.removeAll(); // empty the resultList
     clearAllMarkers(); // clears marker array
