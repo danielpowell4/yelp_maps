@@ -3,12 +3,13 @@
  *          This is the data for an errorMessage
  *   -------------------------------------------------------------------------
  */
-var response = [{
+var errorResponses = [{
 
       'id': '12309120',
       'name': "OH NO!!",
       'snippet_text': "You're yelp request didn't go through. Please try again later, or just hang out with the crew.",
       'image_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
+      'rating_img_url' : 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
       'address1': '2950 Camozzi Rd',
       'cityState': 'Revelstoke, BC',
       'display_phone': '250 814 0087',
@@ -79,6 +80,48 @@ var response = [{
     }
 
 }, ];
+
+var noMatchFilterResponse = [{
+
+      'id': '12309120',
+      'name': "OH NO!!",
+      'snippet_text': "No titles matched in these results. We only show the top 15 results from Yelp based on ratings. Try another search. There's totally something out there.",
+      'image_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
+      'rating_img_url' : 'http://36.media.tumblr.com/170b376be332902fd8365a6db73b4164/tumblr_nyv6efMxPM1udod9xo1_1280.jpg',
+      'address1': '2950 Camozzi Rd',
+      'cityState': 'Revelstoke, BC',
+      'display_phone': '250 814 0087',
+      'url': 'www.revelstokemountainresort.com/',
+      'location': {
+          'coordinate': {
+              'latitude': 50.962,
+              'longitude': -118.216,
+          },
+          'display_address': ['2955 Ski Town Canada'],
+
+      }
+}
+];
+
+var response = [{
+    'id': '12309120',
+    'name': "Beacon's House",
+    'snippet_text': "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
+    'image_url': 'http://36.media.tumblr.com/170b376be332902fd8365a6db73b4164/tumblr_nyv6efMxPM1udod9xo1_1280.jpg',
+    'address1': '2950 Camozzi Rd',
+    'cityState': 'Revelstoke, BC',
+    'display_phone': '250 814 0087',
+    'url': 'www.revelstokemountainresort.com/',
+    'location': {
+        'coordinate': {
+            'latitude': 50.9583028,
+            'longitude': -118.1637752,
+        },
+        'display_address': ['2950 Camozzi Rd'],
+
+    }
+
+}];
 
 /**
  *   --------------------------------------------------------------------
@@ -151,6 +194,7 @@ var placeCard = function(data) {
 
 /* ---  resultList is the placeCards' holder --- */
 var resultList = ko.observableArray([]);
+var originalList = ko.observableArray([]);
 
 /*
  *   -----------------------------------------------------------------
@@ -178,6 +222,46 @@ function hideYelpResults() {
 
 var searchFor = ko.observable("Pizza"); // form Yelp Search Form with prepopulated placeholder
 var searchNear = ko.observable("80210"); // form Yelp Search Form with prepopulated placeholder
+
+var filterField = ko.observable();
+
+$('.filterField').change(function(){
+  nameList = [];
+  filteredList = [];
+
+  filterField(filterField().toLowerCase())
+
+  for (card in resultList()){
+    nameList.push(
+      { 'index' : card ,
+        'name' : resultList()[card].name().toLowerCase()
+      });
+  };
+
+  for (name in nameList){
+    if (nameList[name].name === filterField()) {
+        filteredList.push(resultList()[nameList[name].index])
+    };
+  };
+
+  if (filteredList.length >= 1){
+    resultList(filteredList);
+    prepMap();
+  } else {
+    /*  ---  Clean up the old lists ---  */
+    resultList.removeAll(); // empty the resultList
+    clearAllMarkers(); // clears marker array
+
+    /*  ---  Display the error message + Beacon  ---  */
+    resultList.push(new placeCard(noMatchFilterResponse[0]));
+
+    /*  ---  clean up the view  ---  */
+    initMap(); // refresh and reconstruct map
+    OpenInfowindowForMarker(0); // open first infoWindow
+    forceTop(); // ensure DOM is scrolled to top
+  }
+
+});
 
 var ViewModel = function() {
     var self = this;
@@ -212,6 +296,10 @@ function sortStars() {
     prepMap();
 }
 
+function resetList() {
+  resultList(originalList());
+  console.log('reset');
+}
 
 ko.applyBindings(new ViewModel());
 
@@ -329,13 +417,16 @@ function makeYelpList(d) {
     /*  ---  Clean up the old lists ---  */
 
     resultList.removeAll(); // empty the resultList
+    originalList.removeAll();
     clearAllMarkers(); // clears marker array
 
     /*  ---  Display the search results  ---  */
 
     response.forEach(function(place) { // place cards into observables
         resultList.push(new placeCard(place));
+        originalList.push(new placeCard(place));
     });
+
     scrollingTriggersMarkers(); // activate scroll position monitor triggers
     initMap(); // refresh and reconstruct map
     OpenInfowindowForMarker(0); // open first infoWindow
@@ -348,7 +439,7 @@ function makeErrorList() {
     clearAllMarkers(); // clears marker array
 
     /*  ---  Display the error message + Beacon  ---  */
-    response.forEach(function(place) {
+    errorResponses.forEach(function(place) {
       resultList.push(new placeCard(place));});
 
     /*  ---  clean up the view  ---  */
@@ -397,8 +488,8 @@ function initMap() {
     // Create a map object and specify the DOM element for display.
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
-            lat: response[0].location.coordinate.latitude - 0.04,
-            lng: response[0].location.coordinate.longitude - 0.07
+            lat: response[0].location.coordinate.latitude - mapShift.right,
+            lng: response[0].location.coordinate.longitude - mapShift.up
         },
         scrollwheel: false,
         zoom: 12,
@@ -487,7 +578,7 @@ function setMarkers(map, points) {
             lng: place.location.coordinate.longitude,
             idSelector: place.marker.idSelector,
             stars: place.marker.stars,
-            windowContent: '<div class="infowindow-title">' + place.marker.title + '</div><br/><img src="' + place.marker.stars + '"></img>',
+            windowContent: '<div class="infowindow-title">' + place.marker.title + '</div><br/><img style="max-width: 96px; height: auto" src="' + place.marker.stars + '"></img>',
         });
 
         /*  ---  push marker to currentMarkers ---  */

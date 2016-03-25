@@ -20,9 +20,11 @@
         <div class="dropdown">
             <span>Filter</span>
             <ul class="filter-btn dropdown-content">
+                <li><input data-bind="textInput: filterField" type="text" class="filterField"></li>
                 <li data-bind="click: sortStars">Sort Rating</li>
                 <li data-bind="click: sortABC">Sort ABC</li>
                 <li data-bind="click: flipCards">Flip List</li>
+                <li data-bind="click: resetList">Reset List</li>
             </ul>
         </div>
     </nav>
@@ -37,10 +39,10 @@
 
         <Form class="yelp-form-box" data-bind="submit: updateYelpResults">
             <p class="search-item">Show me:
-                <input data-bind="value: searchFor" type="text" />
+                <input data-bind="textInput: searchFor" type="text" />
             </p>
             <p class="search-item">in:
-                <input data-bind="value: searchNear" type="text" />
+                <input data-bind="textInput: searchNear" type="text" />
             </p>
             <button class="yelp-btn search-item" data-bind="click: updateYelpResults">Yelp!</button>
         </form>
