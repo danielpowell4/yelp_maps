@@ -225,6 +225,12 @@ var searchNear = ko.observable("80210"); // form Yelp Search Form with prepopula
 
 var filterField = ko.observable();
 
+/*
+ *   -------------------------------------------------------------------------
+ *      The filter and functions
+ *   -------------------------------------------------------------------------
+ */
+
 $('.filterField').change(function(){
   // ensure emtpy lists
   nameList = []; // for names
