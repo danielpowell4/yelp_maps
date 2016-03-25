@@ -230,7 +230,7 @@ var filterField = ko.observable();
  *   -------------------------------------------------------------------------
  */
 
-$('.filterField').change(function() {
+function filterInputField() {
     // ensure emtpy lists
     nameList = []; // for names
     filteredList = []; // for matches

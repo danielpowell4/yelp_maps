@@ -20,7 +20,7 @@
         <div class="dropdown">
             <span>Filter</span>
             <ul class="filter-btn dropdown-content">
-                <li><input data-bind="textInput: filterField" type="text" class="filterField"></li>
+                <li><input data-bind="textInput: filterField, event: { keyup: filterInputField }" type="text" class="filterField" placeholder="Filter Results"></li>
                 <li data-bind="click: sortStars">Sort Rating</li>
                 <li data-bind="click: sortABC">Sort ABC</li>
                 <li data-bind="click: flipCards">Flip List</li>
