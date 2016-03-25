@@ -5,24 +5,24 @@
  */
 var errorResponses = [{
 
-      'id': '12309120',
-      'name': "OH NO!!",
-      'snippet_text': "You're yelp request didn't go through. Please try again later, or just hang out with the crew.",
-      'image_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
-      'rating_img_url' : 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
-      'address1': '2950 Camozzi Rd',
-      'cityState': 'Revelstoke, BC',
-      'display_phone': '250 814 0087',
-      'url': 'www.revelstokemountainresort.com/',
-      'location': {
-          'coordinate': {
-              'latitude': 50.962,
-              'longitude': -118.216,
-          },
-          'display_address': ['2955 Ski Town Canada'],
+    'id': '12309120',
+    'name': "OH NO!!",
+    'snippet_text': "You're yelp request didn't go through. Please try again later, or just hang out with the crew.",
+    'image_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
+    'rating_img_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
+    'address1': '2950 Camozzi Rd',
+    'cityState': 'Revelstoke, BC',
+    'display_phone': '250 814 0087',
+    'url': 'www.revelstokemountainresort.com/',
+    'location': {
+        'coordinate': {
+            'latitude': 50.962,
+            'longitude': -118.216,
+        },
+        'display_address': ['2955 Ski Town Canada'],
 
-      }
-},{
+    }
+}, {
     'id': '12309120',
     'name': "Beacon's House",
     'snippet_text': "Beacon has a world class home. If it is found to be clean, it is shiny than the Trump towner and is filled with an infinite amount of treats as to attract a large amount of puppy friends. In the summer it is often hosting a BBQ and other lustrious affairs.",
@@ -83,25 +83,24 @@ var errorResponses = [{
 
 var noMatchFilterResponse = [{
 
-      'id': '12309120',
-      'name': "OH NO!!",
-      'snippet_text': "No titles matched in these results. We only show the top 15 results from Yelp based on ratings. Try another search. There's totally something out there.",
-      'image_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
-      'rating_img_url' : 'http://36.media.tumblr.com/170b376be332902fd8365a6db73b4164/tumblr_nyv6efMxPM1udod9xo1_1280.jpg',
-      'address1': '2950 Camozzi Rd',
-      'cityState': 'Revelstoke, BC',
-      'display_phone': '250 814 0087',
-      'url': 'www.revelstokemountainresort.com/',
-      'location': {
-          'coordinate': {
-              'latitude': 50.962,
-              'longitude': -118.216,
-          },
-          'display_address': ['2955 Ski Town Canada'],
+    'id': '12309120',
+    'name': "OH NO!!",
+    'snippet_text': "No titles matched in these results. We only show the top 15 results from Yelp based on ratings. Try another search. There's totally something out there.",
+    'image_url': 'http://41.media.tumblr.com/1afb893857c5205fc19341c1c034ab70/tumblr_nye0u9CZBd1udod9xo1_1280.jpg',
+    'rating_img_url': 'http://36.media.tumblr.com/170b376be332902fd8365a6db73b4164/tumblr_nyv6efMxPM1udod9xo1_1280.jpg',
+    'address1': '2950 Camozzi Rd',
+    'cityState': 'Revelstoke, BC',
+    'display_phone': '250 814 0087',
+    'url': 'www.revelstokemountainresort.com/',
+    'location': {
+        'coordinate': {
+            'latitude': 50.962,
+            'longitude': -118.216,
+        },
+        'display_address': ['2955 Ski Town Canada'],
 
-      }
-}
-];
+    }
+}];
 
 var response = [{
     'id': '12309120',
@@ -231,44 +230,44 @@ var filterField = ko.observable();
  *   -------------------------------------------------------------------------
  */
 
-$('.filterField').change(function(){
-  // ensure emtpy lists
-  nameList = []; // for names
-  filteredList = []; // for matches
+$('.filterField').change(function() {
+    // ensure emtpy lists
+    nameList = []; // for names
+    filteredList = []; // for matches
 
-  filterField(filterField().toLowerCase()); //  force the case on the search
+    filterField(filterField().toLowerCase()); //  force the case on the search
 
-  for (card in resultList()){
-    nameList.push(
-      { 'index' : card , // store index
-        'name' : resultList()[card].name().toLowerCase() // grab name as string
-      });
-  };
+    for (var card in resultList()) {
+        nameList.push({
+            'index': card, // store index
+            'name': resultList()[card].name().toLowerCase() // grab name as string
+        });
+    }
 
-  for (name in nameList){
-    if (nameList[name].name.includes(filterField())) { // if a name has the search variable
-        filteredList.push(resultList()[nameList[name].index]) // put it in filtered List
-    };
-  };
+    for (var name in nameList) {
+        if (nameList[name].name.includes(filterField())) { // if a name has the search variable
+            filteredList.push(resultList()[nameList[name].index]); // put it in filtered List
+        }
+    }
 
-  if (filteredList.length >= 1){ // if something in filtered List
-    resultList(filteredList); // put that on the board + map
-    prepMap();
-  } else { // otherwise
-    /* ------  Throw error message ------ */
+    if (filteredList.length >= 1) { // if something in filtered List
+        resultList(filteredList); // put that on the board + map
+        prepMap();
+    } else { // otherwise
+        /* ------  Throw error message ------ */
 
-    /*  ---  Clean up the old lists ---  */
-    resultList.removeAll(); // empty the resultList
-    clearAllMarkers(); // clears marker array
+        /*  ---  Clean up the old lists ---  */
+        resultList.removeAll(); // empty the resultList
+        clearAllMarkers(); // clears marker array
 
-    /*  ---  Display the error message + Beacon  ---  */
-    resultList.push(new placeCard(noMatchFilterResponse[0]));
+        /*  ---  Display the error message + Beacon  ---  */
+        resultList.push(new placeCard(noMatchFilterResponse[0]));
 
-    /*  ---  clean up the view  ---  */
-    initMap(); // refresh and reconstruct map
-    OpenInfowindowForMarker(0); // open first infoWindow
-    forceTop(); // ensure DOM is scrolled to top
-  }
+        /*  ---  clean up the view  ---  */
+        initMap(); // refresh and reconstruct map
+        OpenInfowindowForMarker(0); // open first infoWindow
+        forceTop(); // ensure DOM is scrolled to top
+    }
 
 });
 
@@ -306,8 +305,8 @@ function sortStars() {
 }
 
 function resetList() {
-  resultList(originalList());
-  prepMap();
+    resultList(originalList());
+    prepMap();
 }
 
 ko.applyBindings(new ViewModel());
@@ -449,7 +448,8 @@ function makeErrorList() {
 
     /*  ---  Display the error message + Beacon  ---  */
     errorResponses.forEach(function(place) {
-      resultList.push(new placeCard(place));});
+        resultList.push(new placeCard(place));
+    });
 
     /*  ---  clean up the view  ---  */
     initMap(); // refresh and reconstruct map
@@ -714,5 +714,5 @@ function forceTop() {
 
 /*  ---  googleError in case it breaks --- */
 function googleError() {
-  alert("Google Maps did not load");
+    alert("Google Maps did not load");
 }
