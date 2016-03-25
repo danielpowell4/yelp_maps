@@ -270,7 +270,7 @@ function filterInputField() {
         forceTop(); // ensure DOM is scrolled to top
     }
 
-});
+};
 
 var ViewModel = function() {
     var self = this;

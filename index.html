@@ -51,18 +51,20 @@
 
         <div data-bind="foreach: resultList" class="yelp-search-results tab-list-results">
 
-            <div class="result-card" data-bind="attr: {'id': id}, click: function(){ OpenInfowindowForMarker($index())}">
+            <div class="result-card" data-bind="attr: {'id': id}">
 
-                <div class="place-title">
-                    <h1 class="search-item-counter" data-bind="text: ($index() + 1)"></h1>
-                    <h3 class="search-item-title" data-bind="text: name"></h3>
-                </div>
+                <span data-bind="click: function(){ OpenInfowindowForMarker($index());}" class="hover">
+                  <div class="place-title">
+                      <h1 class="search-item-counter" data-bind="text: ($index() + 1)"></h1>
+                      <h3 class="search-item-title" data-bind="text: name"></h3>
+                  </div>
 
-                <p data-bind="text: description" class="search-item-snippet"></p>
+                  <p data-bind="text: description" class="search-item-snippet"></p>
 
-                <div class="search-image-container">
-                    <img class="search-image" data-bind="attr: {src: imgSrc, alt: imgAltTag}">
-                </div>
+                  <div class="search-image-container">
+                      <img class="search-image" data-bind="attr: {src: imgSrc, alt: imgAltTag}">
+                  </div>
+                </span>
 
                 <div class="search-item-contact-box">
 
